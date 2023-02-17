@@ -1,23 +1,24 @@
 from .app import app
 from .settings import settings
-from tortoise.contrib.fastapi import register_tortoise, connections
+from .logger import *
+from .migrate import migrate
+from tortoise import Tortoise
 
 
 @app.on_event("startup")
 async def on_startup():
-    register_tortoise(
-        app=app,
+    await Tortoise.init(
         db_url=settings.DB_CONNECTION,
-        generate_schemas=True,
-        add_exception_handlers=True,
         modules={
+            "migrate": ["core.migrate"],
             "telegram": ["app.telegram.dao"],
             "dictionary.utm": ["app.dictionary.utm.dao"],
             "account": ["app.account.dao"]
         }
     )
+    await migrate()
 
 
 @app.on_event("shutdown")
 async def on_shutdown():
-    await connections.close_all()
+    await Tortoise.close_connections()

@@ -3,6 +3,7 @@ from pydantic import BaseSettings
 
 class Settings(BaseSettings):
     DB_CONNECTION: str
+    DB_MIGRATE_PATH: str
     TELEGRAM_BOT_TOKEN: str
     TELEGRAM_WEBHOOK_URL: str
 
