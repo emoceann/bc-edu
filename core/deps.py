@@ -12,7 +12,8 @@ async def on_startup():
         add_exception_handlers=True,
         modules={
             "telegram": ["app.telegram.dao"],
-            "dictionary.utm": ["app.dictionary.utm.dao"]
+            "dictionary.utm": ["app.dictionary.utm.dao"],
+            "account": ["app.account.dao"]
         }
     )
 
