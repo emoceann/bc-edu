@@ -11,7 +11,8 @@ async def on_startup():
         generate_schemas=True,
         add_exception_handlers=True,
         modules={
-            "telegram": ["app.telegram.dao"]
+            "telegram": ["app.telegram.dao"],
+            "dictionary.utm": ["app.dictionary.utm.dao"]
         }
     )
 
