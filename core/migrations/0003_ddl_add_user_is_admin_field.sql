@@ -1,0 +1,1 @@
+alter table "user" add column "is_admin" INT NOT NULL  DEFAULT 0;

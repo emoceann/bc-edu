@@ -9,3 +9,4 @@ class User(Model):
     created_at = fields.DatetimeField(auto_now_add=True)
     updated_at = fields.DatetimeField(auto_now=True)
     language_code = fields.CharField(max_length=8, null=True)
+    is_admin = fields.BooleanField(default=False)
