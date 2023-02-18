@@ -11,9 +11,10 @@ async def on_startup():
         db_url=settings.DB_CONNECTION,
         modules={
             "migrate": ["core.migrate"],
+            "account": ["app.account.dao"],
             "telegram": ["app.telegram.dao"],
             "dictionary.utm": ["app.dictionary.utm.dao"],
-            "account": ["app.account.dao"]
+            "i.bizon365": ["app.integration.bizon365.dao"],
         }
     )
     await migrate()

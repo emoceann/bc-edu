@@ -7,6 +7,8 @@ class Settings(BaseSettings):
     TELEGRAM_BOT_TOKEN: str
     TELEGRAM_WEBHOOK_URL: str
 
+    BIZON365_X_TOKEN: str
+
     class Config:
         env_file = "env/dev.env"
         env_file_encoding = "utf-8"
