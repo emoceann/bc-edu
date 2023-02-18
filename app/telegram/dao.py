@@ -7,8 +7,8 @@ class State(models.Model, BaseStorage):
     chat = fields.BigIntField(index=True)
     user = fields.BigIntField(index=True)
     state = fields.CharField(max_length=1024)
-    data = fields.JSONField()
-    bucket = fields.JSONField()
+    data = fields.JSONField(null=True)
+    bucket = fields.JSONField(null=True)
 
     async def close(self):
         pass
