@@ -1,5 +1,6 @@
 import httpx
 from .dao import *
+from .deps import *
 from .models import *
 from core.settings import settings
 from core.logger import logger as log
@@ -17,3 +18,9 @@ async def webinars_get_subpages():
     for room_id, room in response['rooms'].items():
         room, crt = await WebinarRoom.update_or_create(WebinarRoomModel(id=room_id, **room).dict())
         log.debug(f"{'Добавлена' if crt else 'Обновлена'} информация о комнате[{room.id}] - \"{room.title}\"")
+
+
+async def get_webinar_link(room: str, user_id: int) -> str:
+    """ Отправляет ссылку на форму входа в комнату (автоматически подставлен userId) """
+    return f"{settings.BIZON365_BC_HOST}/room/{room}?cf_m_tg={user_id}"
+
