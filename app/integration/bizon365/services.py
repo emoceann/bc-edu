@@ -1,6 +1,5 @@
 import httpx
 from .dao import *
-from .deps import *
 from .models import *
 from core.settings import settings
 from core.logger import logger as log
