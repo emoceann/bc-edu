@@ -1,1 +1,1 @@
-from .deps import app
+from .deps import app, bot, dp

@@ -19,10 +19,3 @@ async def on_startup():
 @app.on_event("shutdown")
 async def on_shutdown():
     ...
-
-
-@app.post("/internal")
-async def webhook(update: dict):
-    Bot.set_current(value=bot)
-    Dispatcher.set_current(value=dp)
-    await dp.process_update(update=types.Update(**update))
