@@ -6,6 +6,7 @@ class Settings(BaseSettings):
     DB_MIGRATE_PATH: str
 
     TELEGRAM_BOT_TOKEN: str
+    TELEGRAM_BOT_USERNAME: str
     TELEGRAM_WEBHOOK_URL: str
     TELEGRAM_ADMIN_CHAT_ID: int
 
