@@ -2,6 +2,8 @@ from tortoise import fields, Model
 
 
 class User(Model):
+    """ Модель юзера бота """
+
     id = fields.BigIntField(pk=True)
     hash = fields.CharField(max_length=255)
     username = fields.CharField(max_length=1024, null=True)
