@@ -4,7 +4,7 @@ from aiogram.dispatcher import FSMContext
 from app.telegram.deps import bot, dp, templates
 from app.dictionary.utm import dao
 from app.account import dao
-from app.telegram.services import register_new_user
+from app.telegram.services import register_user
 
 
 class NewUser(StatesGroup):
@@ -30,7 +30,8 @@ just_dict = {'1': '1', '2': '2', '3': '4', '4': '4'}
 
 @dp.message_handler(commands='start')
 async def cmd_start(msg: types.Message, state: FSMContext):
-    await register_new_user(msg)
+    await register_user(utm_id=msg.get_args(), msg=msg, usr=msg.from_user)
+
     await NewUser.new_or_experienced.set()
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True).add('da', 'net')
     await msg.answer(templates.get_template('start.html').render(), reply_markup=markup)

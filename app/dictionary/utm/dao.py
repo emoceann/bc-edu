@@ -1,4 +1,5 @@
 from tortoise import Model, fields
+from tortoise.fields import CASCADE
 
 
 class UtmLabelDict(Model):
@@ -11,11 +12,8 @@ class UtmLabelDict(Model):
     content = fields.IntField()
 
 
-class BridgeUtmUser(Model):
-    id = fields.IntField(pk=True)
-    user: fields.ForeignKeyRelation["User"] = fields.ForeignKeyField("account.User", related_name="user",
-                                                                     on_delete=fields.CASCADE)
-    utm_label: fields.ForeignKeyRelation["UtmLabelDict"] = fields.ForeignKeyField("dictionary_utm.UtmLabelDict",
-                                                                                  related_name='utmlabeldict',
-                                                                                  on_delete=fields.CASCADE)
+class UtmLabelM2mUser(Model):
+    id = fields.UUIDField(pk=True)
+    user = fields.ForeignKeyField("account.User", related_name="user", on_delete=CASCADE)
+    utm_label = fields.ForeignKeyField("dictionary_utm.UtmLabelDict", related_name='utmlabeldict', on_delete=CASCADE)
     created_at = fields.DatetimeField(auto_now_add=True)

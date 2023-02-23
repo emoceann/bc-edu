@@ -1,19 +1,15 @@
-from .deps import app, bot, dp
 from hashlib import md5
-from app.account.dao import User
-from app.dictionary.utm.dao import BridgeUtmUser, UtmLabelDict
 from aiogram import types
+from .deps import app, bot, dp
+from tortoise.transactions import in_transaction
+from app.account import services as account_service
+from app.dictionary.utm import services as utm_service
 
 
-async def register_new_user(message: types.Message):
-    usr_hash: str = md5(f"{message.from_user.id}-{message.from_user.username}"
-                        f"-{message.from_user.full_name}".encode("utf8")).hexdigest()
-    user: User = await User.get_or_none(id=message.from_user.id)
-    if not user:
-        user = await User.create(hash=usr_hash, **message.from_user.to_python())
-    elif user.hash != usr_hash:
-        await User.filter(id=message.from_user.id).update(hash=usr_hash, **message.from_user.to_python())
-    utm_id = message.text.split(' ')[1]
-    print(user.id)
-    await BridgeUtmUser.create(user_id=user.id, utm_label_id=utm_id)
+async def register_user(utm_id: str | None, msg: types.Message, usr: types.User):
+    usr_hash: str = md5(f"{usr.id}-{usr.username}-{usr.full_name}".encode("utf8")).hexdigest()
 
+    async with in_transaction(connection_name="default") as connection:
+        user_id = await account_service.register_user(user_id=usr.id, user_hash=usr_hash, **msg.from_user.to_python())
+        if utm_id:
+            await utm_service.add_user(utm_id=utm_id, user_id=user_id)
