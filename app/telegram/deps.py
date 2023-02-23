@@ -7,7 +7,7 @@ from aiogram import Bot, Dispatcher, types
 app = APIRouter(tags=["Telegram"])
 bot: Bot = Bot(token=settings.TELEGRAM_BOT_TOKEN, parse_mode='html')
 dp: Dispatcher = Dispatcher(bot=bot, storage=MemoryStorage())
-templates = templating.Jinja2Templates(directory='app/telegram/templates')
+templates = templating.Jinja2Templates(directory='template/telegram')
 
 
 @app.on_event("startup")

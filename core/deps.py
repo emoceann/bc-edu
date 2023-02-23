@@ -14,7 +14,7 @@ async def on_startup():
             "account": ["app.account.dao"],
             "telegram": ["app.telegram.dao"],
             "dictionary_utm": ["app.dictionary.utm.dao"],
-            "i.bizon365": ["app.integration.bizon365.dao"],
+            "integration_bizon365": ["app.integration.bizon365.dao"],
         }
     )
     await migrate()
