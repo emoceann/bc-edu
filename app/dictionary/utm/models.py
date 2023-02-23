@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field
 
 
-class NewTrafficSource(BaseModel):
+class UtmLabelRq(BaseModel):
     source: str = Field(alias='utm_source')
     medium: str = Field(alias='utm_medium')
     campaign: str = Field(alias='utm_campaign')
