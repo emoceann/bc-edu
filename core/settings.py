@@ -13,6 +13,7 @@ class Settings(BaseSettings):
 
     BIZON365_X_TOKEN: str
     BIZON365_BC_HOST: str
+    BIZON365_API_HOST: str
 
     class Config:
         env_file = "env/dev.env"
