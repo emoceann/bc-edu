@@ -12,3 +12,5 @@ class User(Model):
     updated_at = fields.DatetimeField(auto_now=True)
     language_code = fields.CharField(max_length=8, null=True)
     is_admin = fields.BooleanField(default=False)
+    email = fields.CharField(max_length=255)
+    phone_number = fields.CharField(max_length=16)
