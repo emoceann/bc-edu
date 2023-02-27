@@ -15,6 +15,9 @@ class Settings(BaseSettings):
     BIZON365_BC_HOST: str
     BIZON365_API_HOST: str
 
+    NOWPAYMENT_TOKEN: str
+    NOWPAYMENT_CALLBACK_AUTH_TOKEN: str
+
     class Config:
         env_file = "env/dev.env"
         env_file_encoding = "utf-8"
