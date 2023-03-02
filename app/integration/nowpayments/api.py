@@ -4,5 +4,5 @@ from app.integration.nowpayments.services import callback_check
 
 
 @app.post('/info')
-async def payment_callback(info: models.PaymentModel):
+async def payment_callback(info: models.NowPaymentInvoiceModel):
     await callback_check(info)

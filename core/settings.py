@@ -17,6 +17,7 @@ class Settings(BaseSettings):
 
     NOWPAYMENT_TOKEN: str
     NOWPAYMENT_CALLBACK_AUTH_TOKEN: str
+    NOWPAYMENT_URL: str
 
     class Config:
         env_file = "env/dev.env"

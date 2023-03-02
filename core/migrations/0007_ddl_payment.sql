@@ -1,4 +1,4 @@
-create table if not exists "payment"(
+create table if not exists "nowpayment"(
     "payment_id" bigint not null primary key,
     "payment_status" char(10),
     "price_amount" decimal(16, 2),
