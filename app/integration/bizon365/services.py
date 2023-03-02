@@ -19,4 +19,5 @@ async def webinars_get_subpages():
         log.debug(f"{'Добавлена' if crt else 'Обновлена'} информация о комнате[{room.id}] - \"{room.title}\"")
 
 
-
+async def report_parse(report: ReportModel):
+    print(report)
