@@ -1,13 +1,14 @@
 from pydantic import BaseModel, validator, Field
+from decimal import Decimal
 from datetime import datetime
 
 
-class PaymentModel(BaseModel):
+class NowPaymentInvoiceModel(BaseModel):
     payment_id: int
     payment_status: str
-    price_amount: float
+    price_amount: Decimal = Field(max_digits=16, decimal_places=2)
     price_currency: str
-    pay_amount: float
+    pay_amount: Decimal = Field(max_digits=16, decimal_places=10)
     pay_currency: str
     user_id: int = Field(alias='order_description')
     created_at: datetime

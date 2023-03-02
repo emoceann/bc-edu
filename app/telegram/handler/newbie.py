@@ -3,7 +3,7 @@ from aiogram.dispatcher import FSMContext
 from app.telegram.deps import bot, dp, templates
 from app.telegram.handler import NewUser
 
-just_dict = {'1': '1', '2': '2', '3': '4', '4': '4'}
+
 test_template = templates.get_template('question.html')
 
 

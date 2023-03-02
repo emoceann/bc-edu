@@ -1,4 +1,4 @@
 from fastapi import APIRouter
 
 
-app = APIRouter(tags=['Payment'])
+app = APIRouter(tags=['NowPayment'])
