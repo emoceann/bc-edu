@@ -15,6 +15,7 @@ async def on_startup():
             "telegram": ["app.telegram.dao"],
             "dictionary_utm": ["app.dictionary.utm.dao"],
             "integration_bizon365": ["app.integration.bizon365.dao"],
+            "nowpayments": ["app.integration.nowpayments.dao"]
         }
     )
     await migrate()

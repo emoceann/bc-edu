@@ -10,8 +10,8 @@ async def cmd_start(msg: types.Message, state: FSMContext):
     await register_user(utm_id=msg.get_args(), msg=msg, usr=msg.from_user)
 
     await NewUser.new_or_experienced.set()
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True).add('da', 'net')
-    await msg.answer(templates.get_template('start.html').render(), reply_markup=markup)
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True).add('взять билет!', 'как долго я спал?')
+    await bot.send_photo(chat_id=msg.from_user.id, photo='https://t.me/testttings/2', caption=templates.get_template('start.html').render(), reply_markup=markup)
 
 
 @dp.message_handler(state=NewUser.new_or_experienced)
