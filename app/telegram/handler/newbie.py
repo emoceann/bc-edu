@@ -1,6 +1,6 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
-from app.telegram.deps import bot, dp, templates
+from app.telegram.deps import bot, dp, templates, just_dict
 from app.telegram.handler import NewUser
 
 
