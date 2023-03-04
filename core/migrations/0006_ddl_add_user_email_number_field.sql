@@ -1,2 +1,2 @@
 alter table "user" add column "email" CHAR(255);
-alter table "user" add column "number" CHAR(16);
+alter table "user" add column "phone_number" CHAR(16);
