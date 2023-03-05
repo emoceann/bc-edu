@@ -16,3 +16,4 @@ class NewUser(StatesGroup):
     newbie_q8 = State()
     newbie_q9 = State()
     newbie_q10 = State()
+    newbie_test_result = State()
