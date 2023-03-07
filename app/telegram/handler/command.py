@@ -19,7 +19,10 @@ async def cmd_start(msg: types.Message, state: FSMContext):
 async def check_exp(msg: types.Message, state: FSMContext):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     if msg.text == 'взять билет!':
-        await NewUser.experienced.set()
+        text = get_template('expirienced.html', content_list=dict(text_exp1={}))
+        markup = markup.add('Подробнее о Альянсе')
+        await msg.answer(text['text_exp1'], reply_markup=markup)
+        await NewUser.experienced_info.set()
     if msg.text == 'как долго я спал?':
         await NewUser.newbie.set()
         await msg.answer(templates.get_template('newbie.html').render(),
