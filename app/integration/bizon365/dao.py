@@ -7,3 +7,8 @@ class WebinarRoom(models.Model):
     title = fields.CharField(max_length=2048)
     is_autowebinar = fields.BooleanField()
     closest_date = fields.DatetimeField(null=True)
+
+    @property
+    def webinar(self) -> str:
+        assert len(self.id.split(":")) == 2, f"Некорректный идентификатор комнаты \"self.id\""
+        return self.id.split(":")[1]

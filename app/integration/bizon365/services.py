@@ -38,3 +38,7 @@ async def webinars_get_detail_report(webinar_id: str):
     assert response.status_code == 200, "Ошибка сервера Бизон365"
     print(response.json())
 
+
+async def create_link_webinar(webinar: str, username: str, email: str, tg_id: str) -> str:
+    """ Создание ссылки на вебинар """
+    return f"{settings.BIZON365_BC_HOST}/room/{webinar}?email={email}&username={username}&cf_m_tg={tg_id}&autologin"
