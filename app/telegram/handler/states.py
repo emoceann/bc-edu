@@ -4,6 +4,8 @@ from aiogram.dispatcher.filters.state import StatesGroup, State
 class NewUser(StatesGroup):
     new_or_experienced = State()  # стейт новичок или продвинутый
     experienced = State()  # стейт продвинутого
+    experienced_info = State()
+    experienced_choose = State()
     newbie = State()  # стейт новичка
     newbie_knowledge_base = State()
     newbie_q1 = State()
@@ -17,3 +19,9 @@ class NewUser(StatesGroup):
     newbie_q9 = State()
     newbie_q10 = State()
     newbie_test_result = State()
+    alliance_enter_or_webinar = State()
+    webinar_reg_start = State()
+    webinar_user_name = State()
+    webinar_user_email = State()
+    webinar_user_number = State()
+    webinar_user_time = State()
