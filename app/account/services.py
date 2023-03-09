@@ -8,3 +8,7 @@ async def register_user(user_id: int, user_hash: str, **kwargs) -> int:
     else:
         user = await User.create(hash=user_hash, **kwargs)
     return user.id
+
+
+async def find_count_users() -> int:
+    return await User.filter(is_admin=False).count()
