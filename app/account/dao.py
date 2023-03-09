@@ -22,3 +22,5 @@ class User(Model):
     email = fields.CharField(max_length=255, null=True)
     phone_number = fields.CharField(max_length=16, null=True)
     webinar_time = fields.CharEnumField(enum_type=TimeEnum, null=True, max_length=1024)
+    coins = fields.IntField()
+    rank = fields.CharField(max_length=10)
