@@ -21,4 +21,4 @@ class User(Model):
     is_admin = fields.BooleanField(default=False)
     email = fields.CharField(max_length=255, null=True)
     phone_number = fields.CharField(max_length=16, null=True)
-    webinar_time = fields.CharEnumField(enum_type=TimeEnum, null=True, max_length=12)
+    webinar_time = fields.CharEnumField(enum_type=TimeEnum, null=True, max_length=1024)
