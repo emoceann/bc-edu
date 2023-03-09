@@ -1,0 +1,1 @@
+alter table "user" add column "webinar_time" char check ( webinar_time in ('19:00 по мск', '15:00 по мск', '12:00 по мск') )
