@@ -7,6 +7,7 @@ class WebinarRoom(models.Model):
     title = fields.CharField(max_length=2048)
     is_autowebinar = fields.BooleanField()
     closest_date = fields.DatetimeField(null=True)
+    original_report = fields.JSONField(null=True)
 
     @property
     def webinar(self) -> str:
