@@ -1,0 +1,1 @@
+alter table "webinarroom" add column "original_report" JSON;
