@@ -24,3 +24,6 @@ class User(Model):
     webinar_time = fields.CharEnumField(enum_type=TimeEnum, null=True, max_length=1024)
     coins = fields.IntField()
     rank = fields.CharField(max_length=10)
+    newbie = fields.BooleanField(null=True)
+    experienced = fields.BooleanField(null=True)
+
