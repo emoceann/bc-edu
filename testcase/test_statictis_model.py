@@ -7,4 +7,5 @@ from app.statistics.services import StatisticModelBuilder
 async def test_register_user(client: AsyncClient):
     dump_statistics: StatisticModel = await StatisticModelBuilder().build()
 
-    assert dump_statistics.count_use_bot is None
+    assert isinstance(dump_statistics.count_use_bot, int)
+    assert dump_statistics.count_webinar_user is None

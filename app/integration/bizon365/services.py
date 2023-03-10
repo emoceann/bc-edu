@@ -42,3 +42,8 @@ async def webinars_get_detail_report(webinar_id: str):
 async def create_link_webinar(webinar: str, username: str, email: str, tg_id: str) -> str:
     """ Создание ссылки на вебинар """
     return f"{settings.BIZON365_BC_HOST}/room/{webinar}?email={email}&username={username}&cf_m_tg={tg_id}&autologin"
+
+
+async def get_last_not_closed_report() -> dict | None:
+    """ Получение следующего необработанного отчета """
+    return await WebinarRoom.filter(close=False).order_by('closest_date').first().values('original_report')

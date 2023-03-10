@@ -15,13 +15,14 @@ def anyio_backend():
 @pytest.fixture(scope="module")
 async def client():
     await Tortoise.init(
-        db_url="sqlite://:memory:",
+        db_url='sqlite://:memory:',
         modules={
             "migrate": ["core.migrate"],
             "account": ["app.account.dao"],
             "telegram": ["app.telegram.dao"],
             "dictionary_utm": ["app.dictionary.utm.dao"],
-            "i.bizon365": ["app.integration.bizon365.dao"],
+            "integration_bizon365": ["app.integration.bizon365.dao"],
+            "nowpayments": ["app.integration.nowpayments.dao"]
         }
     )
     await migrate()
