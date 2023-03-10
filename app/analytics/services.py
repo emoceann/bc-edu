@@ -2,6 +2,7 @@ from app.account.dao import User
 from app.integration.bizon365 import dao, models
 from app.dictionary.utm.dao import UtmLabelM2mUser
 
+
 class BuildMetrics:
     result: dict[str, int] = {}
     restrict = ['build', 'result', 'get_results', 'restrict']
