@@ -1,3 +1,4 @@
+import asyncio
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from app.telegram.deps import bot, dp, templates
