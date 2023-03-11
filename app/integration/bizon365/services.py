@@ -45,41 +45,27 @@ async def create_link_webinar(webinar: str, username: str, email: str, tg_id: st
     return f"{settings.BIZON365_BC_HOST}/room/{webinar}?email={email}&username={username}&cf_m_tg={tg_id}&autologin"
 
 
-async def get_last_not_closed_report() -> dict | None:
+async def get_last_not_closed_report() -> ReportInsideModel | None:
     """ Получение следующего необработанного отчета """
-    return await WebinarRoom.filter(close=False).order_by('closest_date').first().values('original_report')
+    if query := await WebinarRoom.filter(close=False).order_by('closest_date').first().values('original_report'):
+        return ReportInsideModel.parse_obj(query['original_report']['report'])
 
 
-async def webinars_from_today():
-    date = datetime.today()
-    return await WebinarRoom.filter(closest_date__range=(date.min, date.max)).only('original_report')
+async def count_webinar_users_by_time(source: ReportInside):
+    group_time: dict[int, int] = {1: 0, 2: 0, 3: 0}
+    for user in source.usersMeta.values():
+        millis: int = user['viewTill'] - user['view']
+        hour: float = (millis / (1000 * 60 * 60)) % 24
+
+        if 0 < hour < 1:
+            group_time[1] += 1
+        elif 1 < hour < 2:
+            group_time[2] += 1
+        else:
+            group_time[3] += 1
+
+    return group_time
 
 
-async def count_webinar_users_day():
-    count = 0
-    for i in await webinars_from_today():
-        res = ReportInsideModel.parse_obj(i.original_report['report'])
-        count += len(res.report.rating)
-    return count
-
-
-async def count_webinar_users_by_time(time: int):
-    count = 0
-    for i in await webinars_from_today():
-        users_meta = ReportInsideModel.parse_obj(i.original_report['report']).report.usersMeta.values()
-        for users in users_meta:
-            millis = users['viewTill'] - users['view']
-            hour = (millis / (1000 * 60 * 60)) % 24
-            if hour < time:
-                count += 1
-    return count
-
-
-async def count_webinar_users_ban():
-    count = 0
-    for i in await webinars_from_today():
-        users_meta = ReportInsideModel.parse_obj(i.original_report['report']).report.usersMeta.values()
-        for i in users_meta:
-            if i['ban']:
-                count += count
-    return count
+async def count_webinar_users_ban(source: ReportInside) -> int:
+    return len([user for user in source.usersMeta.values() if user.get('ban', False)])
