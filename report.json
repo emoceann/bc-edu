@@ -1,0 +1,73 @@
+{
+    "report": {
+        "_id": "63f8b3ca36bfd8755eabaccd",
+        "group": "123279",
+        "roomid": "123279:SehTzN8Ro",
+        "webinarId": "123279:SehTzN8Ro*2023-02-24T15:53:39",
+        "playFromRoom": "",
+        "report": "{\"rating\":[\"rMUOX4IRs\",\"rzRuXVUCi\",\"BGO_QVLCi\",\"Hfju7VURs\",\"BzMOQVL0i\"],\"urls\":{\"https://start.bizon365.ru/room/123279/SehTzN8Ro\":2,\"https://start.bizon365.ru/room/123279/SehTzN8Ro?utm_source=telegram&utm_medium=ads_1&utm_campaign=promo\":1,\"https://start.bizon365.ru/room/123279/SehTzN8Ro?utm_source=instagram&utm_medium=ads_2&utm_campaign=low_price\":1,\"https://start.bizon365.ru/room/123279/SehTzN8Ro?utm_source=rassylka&utm_medium=email&utm_campaign=discount\":1},\"partners\":{},\"utmStat\":{\"utm_source\":{\"telegram\":{\"val\":1,\"percent\":33.3},\"instagram\":{\"val\":1,\"percent\":33.3},\"rassylka\":{\"val\":1,\"percent\":33.3}},\"utm_medium\":{\"ads_1\":{\"val\":1,\"percent\":33.3},\"ads_2\":{\"val\":1,\"percent\":33.3},\"email\":{\"val\":1,\"percent\":33.3}},\"utm_campaign\":{\"promo\":{\"val\":1,\"percent\":33.3},\"low_price\":{\"val\":1,\"percent\":33.3},\"discount\":{\"val\":1,\"percent\":33.3}},\"utm_term\":{},\"utm_content\":{},\"utm_keyword\":{},\"utm_banner\":{},\"utm_phrase\":{},\"utm_group\":{}},\"usersMeta\":{\"BzMOQVL0i\":{\"view\":1677243251282,\"viewTill\":1677243326286,\"vi\":[{\"s\":32,\"e\":107}],\"email\":\"test1@mail.ru\",\"username\":\"Тест1\",\"chatUserId\":\"BzMOQVL0i\",\"roomid\":\"123279:SehTzN8Ro\",\"url\":\"https://start.bizon365.ru/room/123279/SehTzN8Ro\",\"webinarId\":\"123279:SehTzN8Ro*2023-02-24T15:53:39\",\"ip\":\"37.214.82.235\",\"created\":\"2023-02-24T12:54:06.942Z\",\"playVideo\":1,\"useragent\":\"Apple Mac, Safari 16.1\",\"finished\":true,\"buttons\":[],\"banners\":[],\"cv\":{\"m_tg\":\"43261267\"},\"cu1\":\"\",\"p1\":\"\",\"p2\":\"\",\"p3\":\"\",\"referer\":\"\",\"sup\":\"\",\"city\":\"Минск\",\"region\":\"Минск\",\"country\":\"Беларусь\"},\"rMUOX4IRs\":{\"view\":1677243261282,\"viewTill\":1677243326286,\"vi\":[{\"s\":42,\"e\":107}],\"email\":\"test2@mail.ru\",\"username\":\"Тест2\",\"chatUserId\":\"rMUOX4IRs\",\"roomid\":\"123279:SehTzN8Ro\",\"url\":\"https://start.bizon365.ru/room/123279/SehTzN8Ro\",\"webinarId\":\"123279:SehTzN8Ro*2023-02-24T15:53:39\",\"ip\":\"37.214.82.235\",\"created\":\"2023-02-24T12:54:07.041Z\",\"playVideo\":1,\"useragent\":\"Apple Mac, Safari 16.1\",\"finished\":true,\"buttons\":[],\"banners\":[],\"cv\":{\"m_tg\":\"46124681\"},\"cu1\":\"\",\"p1\":\"\",\"p2\":\"\",\"p3\":\"\",\"referer\":\"\",\"sup\":\"\",\"city\":\"Минск\",\"region\":\"Минск\",\"country\":\"Беларусь\"},\"BGO_QVLCi\":{\"view\":1677243261282,\"viewTill\":1677243326286,\"vi\":[{\"s\":42,\"e\":107}],\"email\":\"test3@mail.ru\",\"username\":\"Тест3\",\"chatUserId\":\"BGO_QVLCi\",\"roomid\":\"123279:SehTzN8Ro\",\"url\":\"https://start.bizon365.ru/room/123279/SehTzN8Ro?utm_source=telegram&utm_medium=ads_1&utm_campaign=promo\",\"webinarId\":\"123279:SehTzN8Ro*2023-02-24T15:53:39\",\"ip\":\"37.214.82.235\",\"created\":\"2023-02-24T12:54:16.806Z\",\"playVideo\":1,\"useragent\":\"Apple Mac, Safari 16.1\",\"finished\":true,\"buttons\":[],\"banners\":[],\"cv\":{\"m_tg\":\"12461268\"},\"cu1\":\"\",\"p1\":\"\",\"p2\":\"\",\"p3\":\"\",\"referer\":\"\",\"sup\":\"\",\"city\":\"Минск\",\"region\":\"Минск\",\"country\":\"Беларусь\",\"utm_source\":\"telegram\",\"utm_medium\":\"ads_1\",\"utm_campaign\":\"promo\"},\"Hfju7VURs\":{\"view\":1677243266282,\"viewTill\":1677243326286,\"vi\":[{\"s\":47,\"e\":107}],\"email\":\"test4@mail.ru\",\"username\":\"Тест4\",\"chatUserId\":\"Hfju7VURs\",\"roomid\":\"123279:SehTzN8Ro\",\"url\":\"https://start.bizon365.ru/room/123279/SehTzN8Ro?utm_source=instagram&utm_medium=ads_2&utm_campaign=low_price\",\"webinarId\":\"123279:SehTzN8Ro*2023-02-24T15:53:39\",\"ip\":\"37.214.82.235\",\"created\":\"2023-02-24T12:54:16.877Z\",\"playVideo\":1,\"useragent\":\"Apple Mac, Safari 16.1\",\"finished\":true,\"buttons\":[],\"banners\":[],\"cv\":{\"m_tg\":\"21497129\"},\"cu1\":\"\",\"p1\":\"\",\"p2\":\"\",\"p3\":\"\",\"referer\":\"\",\"sup\":\"\",\"city\":\"Минск\",\"region\":\"Минск\",\"country\":\"Беларусь\",\"utm_source\":\"instagram\",\"utm_medium\":\"ads_2\",\"utm_campaign\":\"low_price\"},\"rzRuXVUCi\":{\"view\":1677243266282,\"viewTill\":1677243326286,\"vi\":[{\"s\":47,\"e\":107}],\"email\":\"test5@mail.ru\",\"username\":\"Тест5\",\"chatUserId\":\"rzRuXVUCi\",\"roomid\":\"123279:SehTzN8Ro\",\"url\":\"https://start.bizon365.ru/room/123279/SehTzN8Ro?utm_source=rassylka&utm_medium=email&utm_campaign=discount\",\"webinarId\":\"123279:SehTzN8Ro*2023-02-24T15:53:39\",\"ip\":\"37.214.82.235\",\"created\":\"2023-02-24T12:54:16.988Z\",\"playVideo\":1,\"useragent\":\"Apple Mac, Safari 16.1\",\"finished\":true,\"buttons\":[],\"banners\":[],\"cv\":{\"m_tg\":\"21741827\"},\"cu1\":\"\",\"p1\":\"\",\"p2\":\"\",\"p3\":\"\",\"referer\":\"\",\"sup\":\"\",\"city\":\"Минск\",\"region\":\"Минск\",\"country\":\"Беларусь\",\"utm_source\":\"rassylka\",\"utm_medium\":\"email\",\"utm_campaign\":\"discount\"}}}",
+        "messages": "{\"BzMOQVL0i\":[\"Привет\",\"Видно и слышно\",\"Аууууу\",\"Треш\"],\"rMUOX4IRs\":[\"Всем привет\",\"+\",\"+++\",\"Где вебинар\",\"Конечно да\"],\"BGO_QVLCi\":[\"Классный клип\",\"Нормально\",\"Крипта топ\",\"+++\"],\"Hfju7VURs\":[\"Тест\",\"Бас наваливает\",\"Всем привет\",\"Я тут\"],\"rzRuXVUCi\":[\"Привет!!!!\",\"Всем привет еще раз\",\"Найс\",\"Разбираюсь в крипте давно\"]}",
+        "messagesTS": "{\"BzMOQVL0i\":[40,52,70,84],\"rMUOX4IRs\":[42,54,57,72,86],\"BGO_QVLCi\":[44,60,74,88],\"Hfju7VURs\":[46,64,77,93],\"rzRuXVUCi\":[48,67,81,97]}",
+        "ver": 4,
+        "created": "2023-02-24T12:55:38.891Z"
+    },
+    "room_title": "Test web",
+    "customFields": {
+        "c": {
+            "title": "Город",
+            "i18n": "room_fields.city"
+        },
+        "bd": {
+            "title": "Дата рождения",
+            "i18n": "room_fields.birthday"
+        },
+        "ca": {
+            "title": "Возраст ребенка",
+            "i18n": "room_fields.child_age"
+        },
+        "sf": {
+            "title": "Сфера деятельности",
+            "i18n": "room_fields.business"
+        },
+        "org": {
+            "title": "Название организации",
+            "i18n": "room_fields.org_name"
+        },
+        "sn_vk": {
+            "title": "Ваш профиль VK",
+            "i18n": "room_fields.vk"
+        },
+        "sn_fb": {
+            "title": "Ваш профиль facebook",
+            "i18n": "room_fields.fb"
+        },
+        "sn_in": {
+            "title": "Ваш профиль Instagram",
+            "i18n": "room_fields.insta"
+        },
+        "m_tg": {
+            "title": "Telegram",
+            "i18n": "room_fields.tg"
+        },
+        "m_wa": {
+            "title": "Whatsapp",
+            "i18n": "room_fields.wa"
+        },
+        "ap": {
+            "title": "Откуда узнали о вебинаре",
+            "i18n": "room_fields.source"
+        },
+        "goal": {
+            "title": "Цель обучения",
+            "i18n": "room_fields.purpose"
+        },
+        "pr": {
+            "title": "Промокод",
+            "i18n": "room_fields.promo"
+        },
+        "exp": {
+            "title": "Ваши ожидания",
+            "i18n": "room_fields.expect"
+        }
+    }
+}

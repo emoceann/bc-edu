@@ -10,7 +10,14 @@ class StatisticModelBuilder(StatisticModel):
 
     async def _webinar_report(self):
         if report := await i_bizon365_service.get_last_not_closed_report():
-            print(report)
+            self.count_webinar_users_by_time = len(report.report.rating)
+
+            group_count_webinar_users_by_time = await i_bizon365_service.count_webinar_users_by_time(report.report)
+            self.count_webinar_users_by_1_hour = group_count_webinar_users_by_time[1]
+            self.count_webinar_users_by_2_hour = group_count_webinar_users_by_time[2]
+            self.count_webinar_users_by_3_hour = group_count_webinar_users_by_time[3]
+
+            self.count_webinar_users_ban = await i_bizon365_service.count_webinar_users_ban(report.report)
 
     async def build(self) -> StatisticModel:
         await self._count_use_bot()
