@@ -6,7 +6,7 @@ from app.integration.bizon365 import services as i_bizon365_service
 class StatisticModelBuilder(StatisticModel):
 
     async def _count_use_bot(self):
-        self.count_use_bot = await account_service.find_count_users()
+        self.bot_users_count = await account_service.find_count_users()
 
     async def _webinar_report(self):
         if report := await i_bizon365_service.get_last_not_closed_report():

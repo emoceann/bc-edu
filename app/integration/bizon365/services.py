@@ -3,6 +3,7 @@ from .dao import *
 from .models import *
 from core.settings import settings
 from core.logger import logger as log
+from datetime import datetime
 
 
 async def webinars_get_subpages():
@@ -47,3 +48,38 @@ async def create_link_webinar(webinar: str, username: str, email: str, tg_id: st
 async def get_last_not_closed_report() -> dict | None:
     """ Получение следующего необработанного отчета """
     return await WebinarRoom.filter(close=False).order_by('closest_date').first().values('original_report')
+
+
+async def webinars_from_today():
+    date = datetime.today()
+    return await WebinarRoom.filter(closest_date__range=(date.min, date.max)).only('original_report')
+
+
+async def count_webinar_users_day():
+    count = 0
+    for i in await webinars_from_today():
+        res = ReportInsideModel.parse_obj(i.original_report['report'])
+        count += len(res.report.rating)
+    return count
+
+
+async def count_webinar_users_by_time(time: int):
+    count = 0
+    for i in await webinars_from_today():
+        users_meta = ReportInsideModel.parse_obj(i.original_report['report']).report.usersMeta.values()
+        for users in users_meta:
+            millis = users['viewTill'] - users['view']
+            hour = (millis / (1000 * 60 * 60)) % 24
+            if hour < time:
+                count += 1
+    return count
+
+
+async def count_webinar_users_ban():
+    count = 0
+    for i in await webinars_from_today():
+        users_meta = ReportInsideModel.parse_obj(i.original_report['report']).report.usersMeta.values()
+        for i in users_meta:
+            if i['ban']:
+                count += count
+    return count
