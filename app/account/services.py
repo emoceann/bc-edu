@@ -14,13 +14,25 @@ async def find_count_users() -> int:
     return await User.filter(is_admin=False).count()
 
 
-async def count_users_by_rank(rank: str) -> int:
+async def find_count_users_by_rank(rank: str) -> int:
     return await User.filter(rank=rank).count()
 
 
-async def count_users_test_above_six() -> int:
+async def find_count_users_test_above_six() -> int:
     return await User.filter(coins__gt=500).count()
 
 
-async def count_users_newbie_or_expert(newbie: bool) -> int:
+async def find_count_users_newbie_or_expert(newbie: bool) -> int:
     return await User.filter(newbie=newbie).count()
+
+
+async def find_count_users_test() -> int:
+    return await User.filter(test_finished=True).count()
+
+
+async def find_count_users_knowledgebase() -> int:
+    return await User.filter(knowledgebase_red=True).count()
+
+
+async def update_user_fields(user_id: int, data: dict):
+    await User.filter(id=user_id).update(**data)

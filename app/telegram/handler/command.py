@@ -4,7 +4,7 @@ from aiogram.dispatcher import FSMContext
 from app.telegram.deps import bot, dp, templates
 from app.telegram.handler.states import NewUser
 from app.telegram.services import register_user, get_template
-
+from app.account import services as account_services
 
 @dp.message_handler(commands='start')
 async def cmd_start(msg: types.Message, state: FSMContext):
@@ -20,11 +20,13 @@ async def cmd_start(msg: types.Message, state: FSMContext):
 async def check_exp(msg: types.Message, state: FSMContext):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     if msg.text == 'взять билет!':
+        await account_services.update_user_fields(msg.from_user.id, {'experienced': True})
         text = get_template('expirienced.html', content_list=dict(text_exp1={}))
         markup = markup.add('Подробнее о Альянсе')
         await msg.answer(text['text_exp1'], reply_markup=markup)
         await NewUser.experienced_info.set()
     if msg.text == 'как долго я спал?':
+        await account_services.update_user_fields(msg.from_user.id, {'newbie': True})
         await NewUser.newbie.set()
         await msg.answer(templates.get_template('newbie.html').render(),
                          reply_markup=markup.add('пройти испытание', 'изучить базу знаний'))
@@ -33,6 +35,11 @@ async def check_exp(msg: types.Message, state: FSMContext):
 @dp.message_handler(state=NewUser.newbie)
 async def newbie_state(msg: types.Message, state: FSMContext):
     if msg.text == 'изучить базу знаний':
+        text = get_template('newbie_knowledge_base.html',
+                            content_list=dict(text_knowledge={'sum': (await state.get_data()).get('banana_coins', 0)}, buttons1={}))
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True).add(
+            *(i for i in text['buttons1'].split('\n')))
+        await msg.answer(text['text_knowledge'], reply_markup=markup)
         await NewUser.newbie_knowledge_base.set()
     if msg.text == 'пройти испытание':
         await NewUser.newbie_q1.set()

@@ -4,6 +4,7 @@ import asyncio
 from app.telegram.deps import bot, dp
 from app.telegram.handler.states import NewUser
 from app.telegram.services import get_template
+from app.account import services as account_services
 
 
 @dp.message_handler(state=NewUser.newbie_q1)  # хендлер новичка, который выбрал тесты
@@ -12,10 +13,10 @@ async def newbie_q2(msg: types.Message, state: FSMContext):
                         content_list=dict(answer_1={}, wrong_answer_1={}, question_2={}, keyboard_3={}))
     async with state.proxy() as data:
         if msg.text == '3':
-            data['banana_coins'] = 100
+            data['coins'] = 100
             await msg.answer(text['answer_1'])
         else:
-            data['banana_coins'] = 0
+            data['coins'] = 0
             await msg.answer(text['wrong_answer_1'])
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True).add(
         *(i for i in text['keyboard_3'].split()))
@@ -30,7 +31,7 @@ async def newbie_q4(msg: types.Message, state: FSMContext):
                         content_list=dict(answer_2={}, wrong_answer_2={}, question_3={}, keyboard_4={}))
     if msg.text == '1':
         async with state.proxy() as data:
-            data['banana_coins'] += 100
+            data['coins'] += 100
             await msg.answer(text['answer_2'])
     else:
         await msg.answer(text['wrong_answer_2'])
@@ -47,7 +48,7 @@ async def newbie_q4(msg: types.Message, state: FSMContext):
                         content_list=dict(answer_3={}, wrong_answer_3={}, question_4={}, keyboard_3={}))
     if msg.text == '4':
         async with state.proxy() as data:
-            data['banana_coins'] += 100
+            data['coins'] += 100
             await msg.answer(text['answer_3'])
     else:
         await msg.answer(text['wrong_answer_3'])
@@ -64,7 +65,7 @@ async def newbie_q5(msg: types.Message, state: FSMContext):
                         content_list=dict(answer_4={}, wrong_answer_4={}, question_5={}, keyboard_4={}))
     if msg.text == '2':
         async with state.proxy() as data:
-            data['banana_coins'] += 100
+            data['coins'] += 100
             await msg.answer(text['answer_4'])
     else:
         await msg.answer(text['wrong_answer_4'])
@@ -81,7 +82,7 @@ async def newbie_q5(msg: types.Message, state: FSMContext):
                         content_list=dict(answer_5={}, wrong_answer_5={}, question_6={}, keyboard_4={}))
     if msg.text == '1':
         async with state.proxy() as data:
-            data['banana_coins'] += 100
+            data['coins'] += 100
             await msg.answer(text['answer_5'])
     else:
         await msg.answer(text['wrong_answer_5'])
@@ -99,7 +100,7 @@ async def newbie_q6(msg: types.Message, state: FSMContext):
                         content_list=dict(answer_6={}, wrong_answer_6={}, question_7={}, keyboard_4={}))
     if msg.text == '3':
         async with state.proxy() as data:
-            data['banana_coins'] += 100
+            data['coins'] += 100
             await msg.answer(text['answer_6'])
     else:
         await msg.answer(text['wrong_answer_6'])
@@ -117,7 +118,7 @@ async def newbie_q7(msg: types.Message, state: FSMContext):
                         content_list=dict(answer_7={}, wrong_answer_7={}, question_8={}, keyboard_4={}))
     if msg.text == '1':
         async with state.proxy() as data:
-            data['banana_coins'] += 100
+            data['coins'] += 100
             await msg.answer(text['answer_7'])
     else:
         await msg.answer(text['wrong_answer_7'])
@@ -135,7 +136,7 @@ async def newbie_q8(msg: types.Message, state: FSMContext):
                         content_list=dict(answer_8={}, wrong_answer_8={}, question_9={}, keyboard_3={}))
     if msg.text == '2':
         async with state.proxy() as data:
-            data['banana_coins'] += 100
+            data['coins'] += 100
             await msg.answer(text['answer_8'])
     else:
         await msg.answer(text['wrong_answer_8'])
@@ -153,12 +154,12 @@ async def newbie_q10(msg: types.Message, state: FSMContext):
                         content_list=dict(answer_9={}, wrong_answer_9={}, question_10={}, keyboard_4={}))
     if msg.text == '1':
         async with state.proxy() as data:
-            data['banana_coins'] += 100
+            data['coins'] += 100
             await msg.answer(text['answer_9'])
     else:
         await msg.answer(text['wrong_answer_9'])
 
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)\
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True) \
         .add(*(i for i in text['keyboard_4'].split()))
     await asyncio.sleep(3)
     await msg.answer(text['question_10'], reply_markup=markup)
@@ -170,13 +171,14 @@ async def newbie_result(msg: types.Message, state: FSMContext):
     text = get_template('questions.html', content_list=dict(answer_10={}, wrong_answer_10={}))
     if msg.text == '4':
         async with state.proxy() as data:
-            data['banana_coins'] += 100
+            data['coins'] += 100
             data['test_finished'] = True
             await msg.answer(text['answer_10'])
     else:
         async with state.proxy() as data:
-            data['banana_coins'] += 100
+            data['coins'] += 100
         await msg.answer(text['wrong_answer_10'])
+    await account_services.update_user_fields(msg.from_user.id, await state.get_data())
     await asyncio.sleep(3)
     text = get_template('questions.html', content_list=dict(results={'sum': (await state.get_data())['banana_coins']}))
     await msg.answer(text['results'])

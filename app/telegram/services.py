@@ -1,11 +1,12 @@
+import re
 from hashlib import md5
 from aiogram import types
 from jinja2 import Template
-
 from .deps import app, bot, dp, templates
 from tortoise.transactions import in_transaction
 from app.account import services as account_service
 from app.dictionary.utm import services as utm_service
+from PIL import Image
 
 
 async def register_user(utm_id: str | None, msg: types.Message, usr: types.User):
@@ -22,3 +23,11 @@ def get_template(name: str, content_list: dict[str, dict | None]) -> dict[str, s
     return dict(
         (key, u"".join(template.blocks[key](template.new_context(params)))) for key, params in content_list.items()
     )
+
+
+async def phone_number_and_email_validator(phone_or_email: str):
+    if re.match(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)", phone_or_email):
+        return True
+    elif re.match(r"^(\+)[1-9][0-9\-\(\)\.]{9,15}$", phone_or_email):
+        return True
+    return False
