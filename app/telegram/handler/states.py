@@ -8,6 +8,8 @@ class NewUser(StatesGroup):
     experienced_choose = State()
     newbie = State()  # стейт новичка
     newbie_knowledge_base = State()
+    newbie_articles_info = State()
+    newbie_knowledge_choose = State()
     newbie_q1 = State()
     newbie_q2 = State()
     newbie_q3 = State()
