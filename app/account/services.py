@@ -1,3 +1,4 @@
+from tortoise.expressions import F
 from .dao import *
 
 
@@ -19,7 +20,7 @@ async def find_count_users_by_rank(rank: str) -> int:
 
 
 async def find_count_users_test_above_six() -> int:
-    return await User.filter(coins__gt=500).count()
+    return await User.filter(test=True, coins__gt=500).count()
 
 
 async def find_count_users_newbie_or_expert(newbie: bool) -> int:
@@ -35,4 +36,7 @@ async def find_count_users_knowledgebase() -> int:
 
 
 async def update_user_fields(user_id: int, data: dict):
-    await User.filter(id=user_id).update(**data)
+    user = User.filter(id=user_id)
+    if coins := data.pop('coins', None):
+        await user.update(coins=F('coins') + coins)
+    await user.update(**data)

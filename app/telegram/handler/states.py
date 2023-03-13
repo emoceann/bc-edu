@@ -21,6 +21,7 @@ class NewUser(StatesGroup):
     newbie_q9 = State()
     newbie_q10 = State()
     newbie_test_result = State()
+    newbie_choose_after_test = State()
     alliance_enter_or_webinar = State()
     webinar_reg_start = State()
     webinar_user_name = State()

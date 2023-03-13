@@ -6,6 +6,7 @@ from app.telegram.handler.states import NewUser
 from app.telegram.services import register_user, get_template
 from app.account import services as account_services
 
+
 @dp.message_handler(commands='start')
 async def cmd_start(msg: types.Message, state: FSMContext):
     await register_user(utm_id=msg.get_args(), msg=msg, usr=msg.from_user)
@@ -35,9 +36,11 @@ async def check_exp(msg: types.Message, state: FSMContext):
 @dp.message_handler(state=NewUser.newbie)
 async def newbie_state(msg: types.Message, state: FSMContext):
     if msg.text == 'изучить базу знаний':
+        await account_services.update_user_fields(msg.from_user.id, {'coins': 100})
         text = get_template('newbie_knowledge_base.html',
-                            content_list=dict(text_knowledge={'sum': (await state.get_data()).get('banana_coins', 0)}, buttons1={}))
-        markup = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True).add(
+                            content_list=dict(text_knowledge={'sum': (await state.get_data()).get('coins', 0)},
+                                              buttons1={}))
+        markup = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True, one_time_keyboard=True).add(
             *(i for i in text['buttons1'].split('\n')))
         await msg.answer(text['text_knowledge'], reply_markup=markup)
         await NewUser.newbie_knowledge_base.set()
@@ -47,5 +50,6 @@ async def newbie_state(msg: types.Message, state: FSMContext):
         await msg.answer(text['start_test'])
         await asyncio.sleep(5)
         text = get_template('questions.html', content_list=dict(question_1={}, keyboard_3={}))
-        markup = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True).add(*(i for i in text['keyboard_3'].split()))
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True).add(
+            *(i for i in text['keyboard_3'].split()))
         await msg.answer(text['question_1'], reply_markup=markup)

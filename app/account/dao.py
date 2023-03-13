@@ -26,5 +26,5 @@ class User(Model):
     knowledgebase_red = fields.BooleanField(default=False)
     newbie = fields.BooleanField(default=False)
     experienced = fields.BooleanField(default=False)
-    coins = fields.IntField(null=True)
+    coins = fields.IntField(default=0)
     rank = fields.CharField(max_length=10, null=True)
