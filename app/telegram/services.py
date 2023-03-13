@@ -25,9 +25,13 @@ def get_template(name: str, content_list: dict[str, dict | None]) -> dict[str, s
     )
 
 
-async def phone_number_and_email_validator(phone_or_email: str):
-    if re.match(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)", phone_or_email):
+async def email_validator(email: str):
+    if re.match(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)", email):  # эмейл
         return True
-    elif re.match(r"^(\+)[1-9][0-9\-\(\)\.]{9,15}$", phone_or_email):
+    return False
+
+
+async def phone_number_validator(phone: str):
+    if re.match(r"^(\+)[1-9][0-9\-\(\)\.]{9,15}$", phone):  # номер телефона
         return True
     return False

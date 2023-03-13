@@ -5,6 +5,7 @@ from app.telegram.deps import bot, dp
 from app.telegram.handler.states import NewUser
 from app.telegram.services import get_template
 from app.account import services as account_services
+from app.integration.bizon365 import services as bizon_services
 
 
 @dp.message_handler(state=NewUser.newbie_q1)  # хендлер новичка, который выбрал тесты
@@ -115,7 +116,7 @@ async def newbie_q6(msg: types.Message, state: FSMContext):
 @dp.message_handler(state=NewUser.newbie_q8)
 async def newbie_q7(msg: types.Message, state: FSMContext):
     text = get_template('questions.html',
-                        content_list=dict(answer_7={}, wrong_answer_7={}, question_8={}, keyboard_4={}))
+                        content_list=dict(answer_7={}, wrong_answer_7={}, question_8={}, keyboard_3={}))
     if msg.text == '1':
         async with state.proxy() as data:
             data['coins'] += 100
@@ -124,7 +125,7 @@ async def newbie_q7(msg: types.Message, state: FSMContext):
         await msg.answer(text['wrong_answer_7'])
 
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True).add(
-        *(i for i in text['keyboard_4'].split()))
+        *(i for i in text['keyboard_3'].split()))
     await asyncio.sleep(3)
     await msg.answer(text['question_8'], reply_markup=markup)
     await NewUser.newbie_q9.set()
@@ -168,7 +169,9 @@ async def newbie_q10(msg: types.Message, state: FSMContext):
 
 @dp.message_handler(state=NewUser.newbie_test_result)
 async def newbie_result(msg: types.Message, state: FSMContext):
-    text = get_template('questions.html', content_list=dict(answer_10={}, wrong_answer_10={}))
+    text = get_template('questions.html', content_list=dict(answer_10={}, wrong_answer_10={}, buttons={
+        'webinar_title': await bizon_services.get_last_webinar_title()}))
+    markup = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True).add(*(i for i in text['buttons'].split('\n')))
     if msg.text == '4':
         async with state.proxy() as data:
             data['coins'] += 100
@@ -180,5 +183,28 @@ async def newbie_result(msg: types.Message, state: FSMContext):
         await msg.answer(text['wrong_answer_10'])
     await account_services.update_user_fields(msg.from_user.id, await state.get_data())
     await asyncio.sleep(3)
-    text = get_template('questions.html', content_list=dict(results={'sum': (await state.get_data())['banana_coins']}))
-    await msg.answer(text['results'])
+    text = get_template('questions.html', content_list=dict(results={'sum': (await state.get_data())['coins']}))
+    await msg.answer(text['results'], reply_markup=markup)
+    await NewUser.newbie_choose_after_test.set()
+
+
+@dp.message_handler(state=NewUser.newbie_choose_after_test)
+async def newbie_choose_after(msg: types.Message, state: FSMContext):
+    if msg.text == 'присоединиться к Banana Crypto Alliance':
+        text = get_template('questions.html', content_list=dict(alliance_link={}, ))
+        await msg.answer(text['alliance_link'])
+    if msg.text.startswith('зарегистрироваться на вебинар'):
+        text = get_template('webinar_reg.html', content_list=dict(webinar_info={}, button_1={}))
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True).add(text['button_1'])
+        await msg.answer(text['webinar_info'], reply_markup=markup)
+        await NewUser.webinar_reg_start.set()
+    if msg.text == 'изучить базу знаний':
+        text = get_template('newbie_knowledge_base.html',
+                            content_list=dict(text_knowledge={'sum': (await state.get_data()).get('coins', 0)},
+                                              buttons1={}))
+        markup = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True, one_time_keyboard=True).add(
+            *(i for i in text['buttons1'].split('\n')))
+        await msg.answer(text['text_knowledge'], reply_markup=markup)
+        await NewUser.newbie_knowledge_base.set()
+    if msg.text == 'посмотреть результаты Banana Crypto Alliance':
+        await msg.answer('Результаты')

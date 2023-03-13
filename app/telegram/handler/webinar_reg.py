@@ -2,8 +2,9 @@ from app.telegram.deps import dp, bot
 from app.telegram.handler.states import NewUser
 from aiogram.dispatcher import FSMContext
 from aiogram import types
-from app.telegram.services import get_template, phone_number_and_email_validator
+from app.telegram.services import get_template, phone_number_validator, email_validator
 from app.account import services as account_services
+from app.integration.bizon365 import services as bizon_services
 
 
 @dp.message_handler(state=NewUser.webinar_reg_start)
@@ -25,7 +26,7 @@ async def webinar_user_name(msg: types.Message, state: FSMContext):
 
 @dp.message_handler(state=NewUser.webinar_user_email)
 async def webinar_user_email(msg: types.Message, state: FSMContext):
-    if not await phone_number_and_email_validator(msg.text):
+    if not await email_validator(msg.text):
         await msg.reply('Неправильный формат!')
     else:
         text = get_template('webinar_reg.html', content_list=dict(webinar_reg3={}))
@@ -38,7 +39,7 @@ async def webinar_user_email(msg: types.Message, state: FSMContext):
 
 @dp.message_handler(state=NewUser.webinar_user_number)
 async def webinar_user_number(msg: types.Message, state: FSMContext):
-    if not await phone_number_and_email_validator(msg.text):
+    if not await phone_number_validator(msg.text):
         await msg.reply('Неправильный формат!')
     else:
         text = get_template('webinar_reg.html', content_list=dict(webinar_reg4={}, button_time={}))
@@ -52,7 +53,10 @@ async def webinar_user_number(msg: types.Message, state: FSMContext):
 
 @dp.message_handler(state=NewUser.webinar_user_time)
 async def webinar_reg_end(msg: types.Message, state: FSMContext):
-    text = get_template('webinar_reg.html', content_list=dict(webinar_reg_end={'time': msg.text}))
+    text = get_template(
+        'webinar_reg.html',
+        content_list=dict(webinar_reg_end={'time': msg.text, 'webinar_title': await bizon_services.get_last_webinar_title()})
+    )
     async with state.proxy() as data:
         data['webinar_time'] = msg.text
 
