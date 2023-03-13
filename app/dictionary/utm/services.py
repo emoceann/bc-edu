@@ -16,3 +16,7 @@ async def count_reg_users_by_metric_or_all(metric: str = None) -> int:
     if metric:
         return await UtmLabelM2mUser.filter(utm_label__source=metric).count()
     return await UtmLabelM2mUser.all().count()
+
+
+async def count_reg_user_by_target() -> int:
+    return await UtmLabelM2mUser.exclude(utm_label__source='telegram').count()

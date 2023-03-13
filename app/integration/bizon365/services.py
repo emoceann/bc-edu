@@ -69,3 +69,7 @@ async def count_webinar_users_by_time(source: ReportInside):
 
 async def count_webinar_users_ban(source: ReportInside) -> int:
     return len([user for user in source.usersMeta.values() if user.get('ban', False)])
+
+
+async def get_last_webinar_title() -> str:
+    return (await WebinarRoom.filter(close=False).order_by('closest_date').first().only('title')).title
