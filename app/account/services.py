@@ -1,4 +1,5 @@
 from tortoise.expressions import F
+from datetime import datetime
 from .dao import *
 
 
@@ -39,4 +40,4 @@ async def update_user_fields(user_id: int, data: dict):
     user = User.filter(id=user_id)
     if coins := data.pop('coins', None):
         await user.update(coins=F('coins') + coins)
-    await user.update(**data)
+    await user.update(**data, updated_at=datetime.utcnow())

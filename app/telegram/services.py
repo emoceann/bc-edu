@@ -6,7 +6,6 @@ from .deps import app, bot, dp, templates
 from tortoise.transactions import in_transaction
 from app.account import services as account_service
 from app.dictionary.utm import services as utm_service
-from PIL import Image
 
 
 async def register_user(utm_id: str | None, msg: types.Message, usr: types.User):
@@ -20,6 +19,15 @@ async def register_user(utm_id: str | None, msg: types.Message, usr: types.User)
 
 def get_template(name: str, content_list: dict[str, dict | None]) -> dict[str, str]:
     template: Template = templates.get_template(name)
+    return dict(
+        (key, u"".join(template.blocks[key](template.new_context(params)))) for key, params in content_list.items()
+    )
+
+
+def get_template_v1(name: str, content_list: dict[str, dict | None] | list) -> dict[str, str]:
+    template: Template = templates.get_template(name)
+    if isinstance(content_list, list):
+        return dict((key, u"".join(template.blocks[key](template.new_context(None)))) for key in content_list)
     return dict(
         (key, u"".join(template.blocks[key](template.new_context(params)))) for key, params in content_list.items()
     )

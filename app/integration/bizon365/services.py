@@ -72,5 +72,6 @@ async def count_webinar_users_ban(source: ReportInside) -> int:
 
 
 async def get_last_webinar_title() -> str:
-    webinar = await WebinarRoom.filter(close=False).order_by('closest_date').first().only('title')
-    return webinar.title
+    if webinar := await WebinarRoom.filter(close=False).order_by('closest_date').first().only('title'):
+        return webinar.title
+    return "В данный момент предстоящих вебинаров нет"
