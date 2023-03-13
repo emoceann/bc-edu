@@ -1,9 +1,10 @@
 import httpx
 from .dao import *
 from .models import *
+from itertools import product
 from core.settings import settings
 from core.logger import logger as log
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 async def webinars_get_subpages():
@@ -26,8 +27,15 @@ async def webinars_refresh_reports():
         url=f"{settings.BIZON365_API_HOST}/webinars/reports/getlist",
         headers={"X-Token": settings.BIZON365_X_TOKEN}
     )
-    assert response.status_code == 200, "Ошибка сервера Бизон365"
-    print(response.json())
+    assert response.status_code == 200, f"Ошибка сервера Бизон365 ({response.status_code})"
+
+    # Парсим список доступных отчетов, убираем те что больше месяца
+    reports: list[dict] = [i for i in response.json()['list'] if date_gt(source=i['created'][:-1], days=31)]
+    rooms: list[WebinarRoom] = await WebinarRoom.filter(close=False, report_id__isnull=True)
+
+    for report, room in product(reports, rooms):
+        if report['name'] == room.id:
+            await WebinarRoom.filter(id=room.id).update(report_id=report['webinarId'])
 
 
 async def webinars_get_detail_report(webinar_id: str):
@@ -36,8 +44,8 @@ async def webinars_get_detail_report(webinar_id: str):
         url=f"{settings.BIZON365_API_HOST}/webinars/reports/get?webinarId={webinar_id}",
         headers={"X-Token": settings.BIZON365_X_TOKEN}
     )
-    assert response.status_code == 200, "Ошибка сервера Бизон365"
-    print(response.json())
+    assert response.status_code == 200, f"Ошибка сервера Бизон365 ({response.status_code})"
+    await WebinarRoom.filter(report_id=webinar_id).update(original_report=response.json())
 
 
 async def create_link_webinar(webinar: str, username: str, email: str, tg_id: str) -> str:
@@ -75,3 +83,13 @@ async def get_last_webinar_title() -> str:
     if webinar := await WebinarRoom.filter(close=False).order_by('closest_date').first().only('title'):
         return webinar.title
     return "В данный момент предстоящих вебинаров нет"
+
+
+async def get_first_un_closed_webinar_report() -> str | None:
+    """ Получение первого из очереди отчета на вебинар """
+    if room := await WebinarRoom.get_or_none(close=False, report_id__isnull=False, original_report__isnull=True):
+        return room.report_id
+
+
+def date_gt(source: str, days: int) -> bool:
+    return datetime.fromisoformat(source) < (datetime.now() - timedelta(days=days))
