@@ -72,4 +72,5 @@ async def count_webinar_users_ban(source: ReportInside) -> int:
 
 
 async def get_last_webinar_title() -> str:
-    return (await WebinarRoom.filter(close=False).order_by('closest_date').first().only('title')).title
+    webinar = await WebinarRoom.filter(close=False).order_by('closest_date').first().only('title')
+    return webinar.title
