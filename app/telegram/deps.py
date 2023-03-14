@@ -6,9 +6,11 @@ from aiogram import Bot, Dispatcher, types
 
 app = APIRouter(tags=["Telegram"])
 bot: Bot = Bot(token=settings.TELEGRAM_BOT_TOKEN, parse_mode='html')
-dp: Dispatcher = Dispatcher(bot=bot, storage=MemoryStorage())
+storage = MemoryStorage()
+dp: Dispatcher = Dispatcher(bot=bot, storage=storage)
 templates = templating.Jinja2Templates(directory='template/telegram')
-just_dict = {'1': '1', '2': '2', '3': '4', '4': '4'}
+
+
 
 @app.on_event("startup")
 async def on_startup():

@@ -28,3 +28,4 @@ class NewUser(StatesGroup):
     webinar_user_email = State()
     webinar_user_number = State()
     webinar_user_time = State()
+    notfiy_not_active = State()

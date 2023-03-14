@@ -27,4 +27,4 @@ class User(Model):
     newbie = fields.BooleanField(default=False)
     experienced = fields.BooleanField(default=False)
     coins = fields.IntField(default=0)
-    rank = fields.CharField(max_length=10, null=True)
+    rank = fields.CharField(max_length=10, default='Падаван')

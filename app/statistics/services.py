@@ -2,6 +2,7 @@ from .models import StatisticModel
 from app.account import services as account_service
 from app.integration.bizon365 import services as i_bizon365_service
 from app.dictionary.utm import services as utmlabel_services
+from app.integration.nowpayments import services as nowpayments_services
 
 
 class StatisticModelBuilder(StatisticModel):
@@ -29,6 +30,9 @@ class StatisticModelBuilder(StatisticModel):
         self.count_traffic_all = await utmlabel_services.count_reg_users_by_metric_or_all()
         self.count_traffic_target = await utmlabel_services.count_reg_user_by_target()
         self.count_traffic_telegram = await utmlabel_services.count_reg_users_by_metric_or_all(metric='telegram')
+
+    async def _nowpayments_report(self):
+        self.count_nowpayments_all = await nowpayments_services.nowpayments_count()
 
     async def build(self) -> StatisticModel:
         await self._utmlabel_report()

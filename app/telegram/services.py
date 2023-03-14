@@ -1,11 +1,16 @@
 import re
+from datetime import datetime, timedelta
 from hashlib import md5
 from aiogram import types
 from jinja2 import Template
-from .deps import app, bot, dp, templates
+from .deps import app, bot, dp, templates, storage
+from app.telegram.handler.states import NewUser
 from tortoise.transactions import in_transaction
 from app.account import services as account_service
 from app.dictionary.utm import services as utm_service
+from app.account import dao as account_dao
+from core.logger import logger as log
+from app.integration.bizon365 import services as bizon_services
 
 
 async def register_user(utm_id: str | None, msg: types.Message, usr: types.User):
@@ -43,3 +48,34 @@ async def phone_number_validator(phone: str):
     if re.match(r"^(\+)[1-9][0-9\-\(\)\.]{9,15}$", phone):  # номер телефона
         return True
     return False
+
+
+async def get_rank(coins: int):
+    if 0 < coins < 500:
+        return 'Юнлинг'
+    elif 500 < coins < 800:
+        return 'Падаван'
+    return 'Джедай'
+
+
+async def notify_24_hours():
+    yesterday = datetime.today() - timedelta(days=1)
+    not_active = await account_dao.User.filter(updated_at__lt=yesterday).only('id', 'rank', 'test_finished')
+    if not not_active:
+        log.info('Не было неактивных юзеров за вчера')
+        return
+
+    text = get_template(
+        'notify.html',
+        content_list=dict(
+            text={},
+            buttons={'webinar_title': await bizon_services.get_last_webinar_title()}
+        )
+    )
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1).add(*(i for i in text['buttons'].split('\n')))
+    for i in not_active:
+        if not i.test_finished:
+            markup.add('Пройти испытание и заработать Banana-coins')
+        await bot.send_message(i.id, f"{text['text'] + i.rank}!", reply_markup=markup)
+        await storage.set_state(chat=i.id, user=i.id, state=NewUser.notfiy_not_active)
+    log.debug(f'{len(not_active)} - не активных пользователей были успешно уведомлены')
