@@ -48,33 +48,3 @@ async def phone_number_validator(phone: str):
     if re.match(r"^(\+)[1-9][0-9\-\(\)\.]{9,15}$", phone):  # номер телефона
         return True
     return False
-
-
-async def get_rank(coins: int):
-    if 0 < coins < 500:
-        return 'Юнлинг'
-    elif 500 < coins < 800:
-        return 'Падаван'
-    return 'Джедай'
-
-
-async def notify_24_hours():
-    not_active = account_service.get_not_active_users_24_hours('id', 'rank', 'test_finished')
-    if not not_active:
-        log.info('Не было неактивных юзеров за вчера')
-        return
-
-    text = get_template(
-        'notify.html',
-        content_list=dict(
-            text={},
-            buttons={'webinar_title': await bizon_services.get_last_webinar_title()}
-        )
-    )
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1).add(*(i for i in text['buttons'].split('\n')))
-    for i in not_active:
-        if not i.test_finished:
-            markup.add('Пройти испытание и заработать Banana-coins')
-        await bot.send_message(i.id, f"{text['text'] + i.rank}!", reply_markup=markup)
-        await storage.set_state(chat=i.id, user=i.id, state=NewUser.notfiy_not_active)
-    log.debug(f'{len(not_active)} - не активных пользователей были успешно уведомлены')
