@@ -1,16 +1,13 @@
 import re
-from datetime import datetime, timedelta
 from hashlib import md5
 from aiogram import types
 from jinja2 import Template
 from .deps import app, bot, dp, templates, storage
-from app.telegram.handler.states import NewUser
 from tortoise.transactions import in_transaction
 from app.account import services as account_service
-from app.dictionary.utm import services as utm_service
-from app.account import dao as account_dao
-from core.logger import logger as log
 from app.integration.bizon365 import services as bizon_services
+from app.dictionary.utm import services as utm_service
+from core.logger import logger as log
 
 
 async def register_user(utm_id: str | None, msg: types.Message, usr: types.User):
@@ -50,17 +47,8 @@ async def phone_number_validator(phone: str):
     return False
 
 
-async def get_rank(coins: int):
-    if 0 < coins < 500:
-        return 'Юнлинг'
-    elif 500 < coins < 800:
-        return 'Падаван'
-    return 'Джедай'
-
-
 async def notify_24_hours():
-    yesterday = datetime.today() - timedelta(days=1)
-    not_active = await account_dao.User.filter(updated_at__lt=yesterday).only('id', 'rank', 'test_finished')
+    not_active = await account_service.get_not_active_users_24_hours('id', 'rank', 'test_finished')
     if not not_active:
         log.info('Не было неактивных юзеров за вчера')
         return
