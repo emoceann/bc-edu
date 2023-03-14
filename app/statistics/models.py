@@ -15,3 +15,5 @@ class StatisticModel:
     count_traffic_all: int
     count_traffic_telegram: int
     count_traffic_target: int
+
+    count_nowpayments_all: int
