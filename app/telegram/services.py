@@ -3,6 +3,7 @@ from hashlib import md5
 from aiogram import types
 from jinja2 import Template
 from .deps import app, bot, dp, templates, storage
+from app.telegram.handler.states import NewUser
 from tortoise.transactions import in_transaction
 from app.account import services as account_service
 from app.integration.bizon365 import services as bizon_services
@@ -45,6 +46,14 @@ async def phone_number_validator(phone: str):
     if re.match(r"^(\+)[1-9][0-9\-\(\)\.]{9,15}$", phone):  # номер телефона
         return True
     return False
+
+
+async def get_rank(coins: int) -> str:
+    if 0 < coins < 500:
+        return 'Юнлинг'
+    elif 500 < coins < 800:
+        return 'Падаван'
+    return 'Джедай'
 
 
 async def notify_24_hours():
