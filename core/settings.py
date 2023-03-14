@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     TELEGRAM_BOT_USERNAME: str
     TELEGRAM_WEBHOOK_URL: str
     TELEGRAM_ADMIN_CHAT_ID: int
+    TELEGRAM_BOT_STATE_PATH: str
 
     BIZON365_X_TOKEN: str
     BIZON365_BC_HOST: str

@@ -1,15 +1,3 @@
-CREATE TABLE IF NOT EXISTS "state" (
-    "id" CHAR(36) NOT NULL  PRIMARY KEY,
-    "chat" BIGINT NOT NULL,
-    "user" BIGINT NOT NULL,
-    "state" VARCHAR(1024) NOT NULL,
-    "data" JSON NOT NULL,
-    "bucket" JSON NOT NULL
-);
-
-CREATE INDEX IF NOT EXISTS "idx_state_chat_c7db50" ON "state" ("chat");
-CREATE INDEX IF NOT EXISTS "idx_state_user_62f528" ON "state" ("user");
-
 CREATE TABLE IF NOT EXISTS "utmlabeldict" (
     "id" CHAR(36) NOT NULL  PRIMARY KEY,
     "source" VARCHAR(256) NOT NULL,
