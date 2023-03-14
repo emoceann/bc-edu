@@ -1,1 +1,1 @@
-alter table "user" add column "webinar_time" char(1024);
+alter table "user" add column "webinar_time" timestamp;
