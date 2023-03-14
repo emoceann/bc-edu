@@ -29,3 +29,7 @@ async def callback_check(info: models.NowPaymentInvoiceModel):
     if info.payment_status == "finished":
         await dao.NowPayment.update_or_create(**info.dict())
         await bot.send_message(settings.TELEGRAM_ADMIN_CHAT_ID, text=info.json())
+
+
+async def nowpayments_count() -> int:
+    await dao.NowPayment.all().count()
