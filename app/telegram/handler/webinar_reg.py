@@ -2,6 +2,7 @@ from app.telegram.deps import dp, bot
 from app.telegram.handler.states import NewUser
 from aiogram.dispatcher import FSMContext
 from aiogram import types
+from datetime import datetime, timedelta
 from app.telegram.services import get_template, phone_number_validator, email_validator
 from app.account import services as account_services
 from app.integration.bizon365 import services as bizon_services
@@ -79,7 +80,7 @@ async def webinar_reg_end(msg: types.Message, state: FSMContext):
         )
     )
     async with state.proxy() as data:
-        data['webinar_time'] = msg.text
+        data['webinar_time'] = datetime.now().replace(hour=int(msg.text[:1]), minute=0) + timedelta(days=1)
 
     await account_services.update_user_fields(msg.from_user.id, await state.get_data())
     await state.finish()
