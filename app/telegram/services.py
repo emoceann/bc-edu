@@ -59,8 +59,7 @@ async def get_rank(coins: int):
 
 
 async def notify_24_hours():
-    yesterday = datetime.today() - timedelta(days=1)
-    not_active = await account_dao.User.filter(updated_at__lt=yesterday).only('id', 'rank', 'test_finished')
+    not_active = account_service.get_not_active_users_24_hours('id', 'rank', 'test_finished')
     if not not_active:
         log.info('Не было неактивных юзеров за вчера')
         return

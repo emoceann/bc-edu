@@ -1,5 +1,5 @@
 from tortoise.expressions import F
-from datetime import datetime
+from datetime import datetime, timedelta
 from .dao import *
 
 
@@ -41,3 +41,8 @@ async def update_user_fields(user_id: int, data: dict):
     if coins := data.pop('coins', None):
         await user.update(coins=F('coins') + coins)
     await user.update(**data, updated_at=datetime.utcnow())
+
+
+async def get_not_active_users_24_hours(*args):
+    yesterday = datetime.today() - timedelta(days=1)
+    return await User.filter(updated_at__lt=yesterday).only(*args)
