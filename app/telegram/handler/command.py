@@ -7,19 +7,22 @@ from app.telegram.services import register_user, get_template
 from app.account import services as account_services
 
 
-@dp.message_handler(commands='start')
+@dp.message_handler(commands='start', state='*')
 async def cmd_start(msg: types.Message, state: FSMContext):
+    await state.finish()
     await register_user(utm_id=msg.get_args(), msg=msg, usr=msg.from_user)
 
-    await NewUser.new_or_experienced.set()
-    markup = types.ReplyKeyboardMarkup(
-        resize_keyboard=True
-    ).add('Взять билет!', 'Как долго я спал?')
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    user = await account_services.get_user_by_fields(msg.from_user.id, 'test_finished', 'knowledgebase_red')
+    if not user.test_finished or not user.knowledgebase_red:
+        markup.add('Как долго я спал?')
     await bot.send_photo(
         chat_id=msg.from_user.id,
         photo=open('static/telegram/tvoy_bilet.jpg', 'rb'),
         caption=templates.get_template('start.html').render(),
-        reply_markup=markup)
+        reply_markup=markup.add('Изучить базу знаний')
+    )
+    await NewUser.new_or_experienced.set()
 
 
 @dp.message_handler(state=NewUser.new_or_experienced)
@@ -32,10 +35,15 @@ async def check_exp(msg: types.Message, state: FSMContext):
         await msg.answer(text['text_exp1'], reply_markup=markup)
         await NewUser.experienced_info.set()
     if msg.text == 'Как долго я спал?':
+        user = await account_services.get_user_by_fields(msg.from_user.id, 'test_finished', 'knowledgebase_red')
+        if not user.test_finished:
+            markup.add('Пройти испытание')
+        if not user.knowledgebase_red:
+            markup.add('Изучить базу знаний')
         await account_services.update_user_fields(msg.from_user.id, {'newbie': True})
         await NewUser.newbie.set()
         await msg.answer(templates.get_template('newbie.html').render(),
-                         reply_markup=markup.add('Пройти испытание', 'Изучить базу знаний'))
+                         reply_markup=markup)
 
 
 @dp.message_handler(state=NewUser.newbie)

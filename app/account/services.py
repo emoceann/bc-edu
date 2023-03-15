@@ -1,5 +1,5 @@
 from tortoise.expressions import F
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from .dao import *
 
 
@@ -46,3 +46,13 @@ async def update_user_fields(user_id: int, data: dict):
 async def get_not_active_users_24_hours(*args):
     yesterday = datetime.today() - timedelta(days=1)
     return await User.filter(updated_at__lt=yesterday).only(*args)
+
+
+async def get_users_by_webinar_date(date_today: date):
+    return await User.filter(
+        webinar_time=date_today
+    )
+
+
+async def get_user_by_fields(user_id, *args):
+    return await User.get(id=user_id).only(*args)

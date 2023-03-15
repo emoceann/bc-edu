@@ -1,4 +1,5 @@
 import re
+from datetime import datetime, timedelta
 from hashlib import md5
 from aiogram import types
 from jinja2 import Template
@@ -76,3 +77,16 @@ async def notify_24_hours():
         await bot.send_message(i.id, f"{text['text'] + i.rank}!", reply_markup=markup)
         await storage.set_state(chat=i.id, user=i.id, state=NewUser.notfiy_not_active)
     log.debug(f'{len(not_active)} - не активных пользователей были успешно уведомлены')
+
+
+async def webinar_start_notify():
+    today = datetime.now().replace(minute=0, second=0, microsecond=0) + timedelta(hours=1)
+    webinar_users = await account_service.get_users_by_webinar_date(today)
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True).add('Подключится')
+    text = get_template('notify.html', content_list=dict(webinar_start={}))
+
+    for i in webinar_users:
+        await bot.send_message(i.id, text['webinar_start'], reply_markup=markup)
+        await storage.set_state(user=i.id, chat=i.id, state=NewUser.webinar_start)
+
+    log.debug(f'{len(webinar_users)} - Пользователей были успешно уведомлены о начале вебинара')
