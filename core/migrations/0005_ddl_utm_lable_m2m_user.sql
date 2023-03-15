@@ -1,6 +1,0 @@
-CREATE TABLE IF NOT EXISTS "utmlabelm2muser" (
-    "id" CHAR(36) NOT NULL  PRIMARY KEY,
-    "created_at" TIMESTAMP NOT NULL  DEFAULT CURRENT_TIMESTAMP,
-    "user_id" BIGINT NOT NULL REFERENCES "user" ("id") ON DELETE CASCADE,
-    "utm_label_id" CHAR(36) NOT NULL REFERENCES "utmlabeldict" ("id") ON DELETE CASCADE
-);

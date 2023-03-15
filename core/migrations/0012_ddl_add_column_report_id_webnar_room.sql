@@ -1,1 +1,0 @@
-alter table "webinarroom" add column "report_id" char(2048);

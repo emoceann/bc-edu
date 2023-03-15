@@ -20,7 +20,7 @@ async def cmd_start(msg: types.Message, state: FSMContext):
         chat_id=msg.from_user.id,
         photo=open('static/telegram/tvoy_bilet.jpg', 'rb'),
         caption=templates.get_template('start.html').render(),
-        reply_markup=markup.add('Изучить базу знаний')
+        reply_markup=markup.add('Взять билет!')
     )
     await NewUser.new_or_experienced.set()
 
