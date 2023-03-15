@@ -80,7 +80,7 @@ async def webinar_reg_end(msg: types.Message, state: FSMContext):
         )
     )
     async with state.proxy() as data:
-        data['webinar_time'] = datetime.now().replace(hour=int(msg.text[:1]), minute=0) + timedelta(days=1)
+        data['webinar_time'] = datetime.now().replace(hour=int(msg.text[:2]), minute=0, second=0, microsecond=0) + timedelta(days=1)
 
     await account_services.update_user_fields(msg.from_user.id, await state.get_data())
     await state.finish()
