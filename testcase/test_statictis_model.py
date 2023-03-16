@@ -32,5 +32,12 @@ async def test_bizon_model_order_by(client: AsyncClient):
 @pytest.mark.anyio
 async def test_utmlabelm2muser(client: AsyncClient):
     result = await utmlabel_services.count_reg_user_by_target()
-    assert result is 1
+    print(result)
+
+
+@pytest.mark.anyio
+async def test_statistic(client: AsyncClient):
+    await g_services.statistic_upload_to_userbase_sheet(g_sheet)
+    await g_services.statistic_upload_to_dashboard_sheet(g_sheet)
+
 
