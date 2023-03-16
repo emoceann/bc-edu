@@ -10,7 +10,7 @@ async def statistic_upload_to_sheet(sheet: g_sheet):
     cells = [
         Cell(row=3, col=2, value=str(stats.count_user_bot)),
         Cell(row=4, col=2, value=str(stats.count_webinar_user)),
-        # Cell(row=6, col=2, value=str(stats.count_nowpayments_all)),
+        Cell(row=6, col=2, value=str(stats.count_nowpayments_all)),
         Cell(row=8, col=2, value=str(stats.count_traffic_all)),
         Cell(row=9, col=2, value=str(stats.count_traffic_target)),
         Cell(row=11, col=2, value=str(stats.count_traffic_telegram)),
@@ -27,7 +27,7 @@ async def statistic_upload_to_sheet(sheet: g_sheet):
         Cell(row=36, col=2, value=str(stats.count_newbie_test_finished)),
         Cell(row=37, col=2, value=str(stats.count_users_test_above_six)),
         Cell(row=38, col=2, value=str(stats.count_newbie_knowledge_base_red)),
-        # Cell(row=49, col=2, value=str(stats.count_nowpayments_all))
+        Cell(row=49, col=2, value=str(stats.count_nowpayments_all))
     ]
-    dashboard_sheet.update_cells(cells)
+    dashboard_sheet.update_celles(cells)
 
