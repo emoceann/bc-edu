@@ -11,6 +11,7 @@ async def statistic_upload_to_dashboard_sheet(sheet: g_sheet):
     cells = [
         Cell(row=3, col=2, value=str(stats.count_user_bot)),
         Cell(row=4, col=2, value=str(stats.count_webinar_user)),
+        Cell(row=5, col=2, value=str(0)),
         Cell(row=6, col=2, value=str(stats.count_nowpayments_all)),
         Cell(row=8, col=2, value=str(stats.count_traffic_all)),
         Cell(row=9, col=2, value=str(stats.count_traffic_target)),
@@ -28,7 +29,33 @@ async def statistic_upload_to_dashboard_sheet(sheet: g_sheet):
         Cell(row=36, col=2, value=str(stats.count_newbie_test_finished)),
         Cell(row=37, col=2, value=str(stats.count_users_test_above_six)),
         Cell(row=38, col=2, value=str(stats.count_newbie_knowledge_base_red)),
-        Cell(row=49, col=2, value=str(stats.count_nowpayments_all))
+        Cell(row=49, col=2, value=str(stats.count_nowpayments_all)),
+
+        Cell(row=19, col=2, value=str(0)),  # Метрики которых нет
+        Cell(row=21, col=2, value=str(0)),
+        Cell(row=22, col=2, value=str(0)),
+        Cell(row=23, col=2, value=str(0)),
+        Cell(row=24, col=2, value=str(0)),
+        Cell(row=25, col=2, value=str(0)),
+        Cell(row=31, col=2, value=str(0)),
+        Cell(row=32, col=2, value=str(0)),
+        Cell(row=33, col=2, value=str(0)),
+        Cell(row=40, col=2, value=str(0)),
+        Cell(row=41, col=2, value=str(0)),
+        Cell(row=42, col=2, value=str(0)),
+        Cell(row=43, col=2, value=str(0)),
+        Cell(row=45, col=2, value=str(0)),
+        Cell(row=46, col=2, value=str(0)),
+        Cell(row=47, col=2, value=str(0)),
+        Cell(row=49, col=2, value=str(0)),
+        Cell(row=50, col=2, value=str(0)),
+        Cell(row=51, col=2, value=str(0)),
+        Cell(row=52, col=2, value=str(0)),
+        Cell(row=55, col=2, value=str(0)),
+        Cell(row=56, col=2, value=str(0)),
+        Cell(row=57, col=2, value=str(0)),
+        Cell(row=58, col=2, value=str(0)),
+        Cell(row=59, col=2, value=str(0))
     ]
     dashboard_sheet.update_cells(cells)
 

@@ -4,6 +4,8 @@ from app.statistics.services import StatisticModelBuilder
 from app.integration.bizon365 import dao as i_bizon365_dao
 from app.integration.bizon365 import services as bizon_services
 from app.dictionary.utm import services as utmlabel_services
+from app.integration.google.sheet import services as g_services
+from app.integration.google.sheet.deps import g_sheet
 
 
 @pytest.mark.anyio
