@@ -38,4 +38,5 @@ class StatisticModelBuilder(StatisticModel):
         await self._utmlabel_report()
         await self._user_count_bot()
         await self._webinar_report()
+        await self._nowpayments_report()
         return self
