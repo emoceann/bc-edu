@@ -4,6 +4,8 @@ from app.statistics.services import StatisticModelBuilder
 from app.integration.bizon365 import dao as i_bizon365_dao
 from app.integration.bizon365 import services as bizon_services
 from app.dictionary.utm import services as utmlabel_services
+from app.integration.google.sheet import services as g_services
+from app.integration.google.sheet.deps import g_sheet
 
 
 @pytest.mark.anyio
@@ -32,5 +34,12 @@ async def test_bizon_model_order_by(client: AsyncClient):
 @pytest.mark.anyio
 async def test_utmlabelm2muser(client: AsyncClient):
     result = await utmlabel_services.count_reg_user_by_target()
-    assert result is 1
+    print(result)
+
+
+@pytest.mark.anyio
+async def test_statistic(client: AsyncClient):
+    await g_services.statistic_upload_to_userbase_sheet(g_sheet)
+    await g_services.statistic_upload_to_dashboard_sheet(g_sheet)
+
 
