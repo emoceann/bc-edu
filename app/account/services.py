@@ -58,3 +58,7 @@ async def get_users_by_webinar_date_gt(date_today: date):
 
 async def get_user_by_fields(user_id, *args):
     return await User.get(id=user_id).only(*args)
+
+
+async def get_all_users():
+    return await User.all()
