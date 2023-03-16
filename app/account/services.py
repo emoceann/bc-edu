@@ -21,7 +21,7 @@ async def find_count_users_by_rank(rank: str) -> int:
 
 
 async def find_count_users_test_above_six() -> int:
-    return await User.filter(test=True, coins__gt=500).count()
+    return await User.filter(test_finished=True, coins__gt=500).count()
 
 
 async def find_count_users_newbie_or_expert(newbie: bool) -> int:
@@ -49,9 +49,11 @@ async def get_not_active_users_24_hours(*args):
 
 
 async def get_users_by_webinar_date(date_today: date):
-    return await User.filter(
-        webinar_time=date_today
-    )
+    return await User.filter(webinar_time=date_today)
+
+
+async def get_users_by_webinar_date_gt(date_today: date):
+    return await User.filter(webinar_time__gt=date_today)
 
 
 async def get_user_by_fields(user_id, *args):

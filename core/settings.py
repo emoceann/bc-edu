@@ -20,6 +20,8 @@ class Settings(BaseSettings):
     NOWPAYMENT_CALLBACK_AUTH_TOKEN: str
     NOWPAYMENT_URL: str
 
+    GOOGLE_SHEET_URL_TOKEN: str
+
     class Config:
         env_file = "env/dev.env"
         env_file_encoding = "utf-8"
