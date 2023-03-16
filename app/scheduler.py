@@ -33,9 +33,11 @@ async def notify_not_active():
     await tg_services.notify_24_hours()
 
 
+@app.task('every 1 hour')
+async def notify_before_webinar():
+    await tg_services.webinar_before_notify()
+
+
 @app.task(conds.daily.at('11:59') | conds.daily.at('14:59') | conds.daily.at('18:59'))
 async def notify_webinar():
     await tg_services.webinar_start_notify()
-
-
-# @app.task()

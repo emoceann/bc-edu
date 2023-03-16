@@ -1,6 +1,5 @@
 from app.telegram.deps import dp, bot
 from app.telegram.handler.states import NewUser
-from aiogram.dispatcher import FSMContext
 from aiogram import types
 from app.integration.bizon365 import services as bizon_services
 from app.account import services as account_services
