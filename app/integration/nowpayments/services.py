@@ -32,4 +32,4 @@ async def callback_check(info: models.NowPaymentInvoiceModel):
 
 
 async def nowpayments_count() -> int:
-    await dao.NowPayment.all().count()
+    return await dao.NowPayment.all().count()

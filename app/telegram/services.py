@@ -90,3 +90,18 @@ async def webinar_start_notify():
         await storage.set_state(user=i.id, chat=i.id, state=NewUser.webinar_start)
 
     log.debug(f'{len(webinar_users)} - Пользователей были успешно уведомлены о начале вебинара')
+
+
+async def webinar_before_notify():
+    today = datetime.now()
+    webinar_users = await account_service.get_users_by_webinar_date_gt(today)
+    text = get_template('notify.html', content_list=dict(before_12={}, before_3={}, before_1={}))
+    for i in webinar_users:
+        if (i.webinar_time.replace(tzinfo=None) - today) == timedelta(hours=12):
+            await bot.send_message(i.id, text['before_12'])
+        elif (i.webinar_time.replace(tzinfo=None) - today) == timedelta(hours=3):
+            await bot.send_message(i.id, text['before_3'])
+        elif (i.webinar_time.replace(tzinfo=None) - today) == timedelta(hours=1):
+            await bot.send_message(i.id, text['before_1'])
+    log.debug(f'Зарегистрировавшиеся  пользователи были успешно уведомлены до начала вебинара')
+
