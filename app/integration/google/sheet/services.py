@@ -2,6 +2,7 @@ from .deps import g_sheet
 from gspread.cell import Cell
 from app.statistics.services import StatisticModelBuilder
 from app.account import services as account_services
+from app.dictionary.utm import services as utmlabel_services
 
 
 async def statistic_upload_to_dashboard_sheet(sheet: g_sheet):
@@ -87,7 +88,8 @@ async def statistic_upload_to_traffic_sheet(sheet: g_sheet):
         utm_label_cells = [
             Cell(row=start_row, col=1, value=count),
             Cell(
-                row=start_row, col=2, value=str(f'utm_source={value.source}&=utm_medium={value.medium}&utm_campaign{value.campaign}&_utmcontent{value.content}')),
+                row=start_row, col=2, value=str(
+                    f'utm_source={value.source}&=utm_medium={value.medium}&utm_campaign{value.campaign}&_utmcontent{value.content}')),
             Cell(row=start_row, col=3, value=await utmlabel_services.get_count_users_by_utm_label(value.id)),
             Cell(row=start_row, col=4, value=await utmlabel_services.get_count_webinar_users_by_utmlabel(value.id))
         ]

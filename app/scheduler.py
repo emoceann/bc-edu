@@ -2,7 +2,9 @@ from rocketry import Rocketry, conds
 from core.logger import logger as log
 from app.integration.bizon365 import services
 from app.telegram import services as tg_services
-from datetime import datetime
+from app.integration.google.sheet import services as google_services
+from app.integration.google.sheet.deps import g_sheet
+
 
 app = Rocketry(execution="async")
 
@@ -41,3 +43,10 @@ async def notify_before_webinar():
 @app.task(conds.daily.at('11:59') | conds.daily.at('14:59') | conds.daily.at('18:59'))
 async def notify_webinar():
     await tg_services.webinar_start_notify()
+
+
+@app.task('every 24 hours')
+async def upload_stats_to_google():
+    await google_services.statistic_upload_to_userbase_sheet(g_sheet)
+    await google_services.statistic_upload_to_traffic_sheet(g_sheet)
+    await google_services.statistic_upload_to_dashboard_sheet(g_sheet)
