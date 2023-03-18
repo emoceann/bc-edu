@@ -18,4 +18,4 @@ async def on_startup():
 
 @app.on_event("shutdown")
 async def on_shutdown():
-    await dp.storage.close()
+    await dp.storage.wait_closed()
