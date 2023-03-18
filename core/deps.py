@@ -19,7 +19,7 @@ async def on_startup():
         },
 	#use_tz=True
     )
-    await migrate()
+    # await migrate()
 
 
 @app.on_event("shutdown")
