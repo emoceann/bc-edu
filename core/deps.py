@@ -18,7 +18,7 @@ async def on_startup():
             "nowpayments": ["app.integration.nowpayments.dao"]
         }
     )
-    await migrate()
+    # await migrate()
 
 
 @app.on_event("shutdown")

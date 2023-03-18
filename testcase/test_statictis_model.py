@@ -43,3 +43,6 @@ async def test_statistic(client: AsyncClient):
     await g_services.statistic_upload_to_dashboard_sheet(g_sheet)
 
 
+@pytest.mark.anyio
+async def test_traffic_stat(client: AsyncClient):
+    await g_services.statistic_upload_to_traffic_sheet(g_sheet)
