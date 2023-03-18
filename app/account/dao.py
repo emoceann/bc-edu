@@ -21,7 +21,7 @@ class User(Model):
     is_admin = fields.BooleanField(default=False)
     email = fields.CharField(max_length=255, null=True)
     phone_number = fields.CharField(max_length=16, null=True)
-    webinar_time = fields.DatetimeField()
+    webinar_time = fields.DatetimeField(null=True)
     test_finished = fields.BooleanField(default=False)
     knowledgebase_red = fields.BooleanField(default=False)
     newbie = fields.BooleanField(default=False)
