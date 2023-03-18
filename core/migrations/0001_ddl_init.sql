@@ -81,23 +81,6 @@ CREATE TABLE IF NOT EXISTS nowpayment (
 );
 
 
--- useractions definition
-
--- Drop table
-
--- DROP TABLE useractions;
-
-CREATE TABLE IF NOT EXISTS useractions (
-	id serial4 NOT NULL,
-	"rank" varchar(10) NOT NULL,
-	coins int4 NOT NULL,
-	webinar_time varchar(12) NOT NULL,
-	user_id int8 NOT NULL,
-	CONSTRAINT useractions_pkey PRIMARY KEY (id),
-	CONSTRAINT useractions_user_id_fkey FOREIGN KEY (user_id) REFERENCES "user"(id) ON DELETE CASCADE
-);
-
-
 -- utmlabelm2muser definition
 
 -- Drop table
