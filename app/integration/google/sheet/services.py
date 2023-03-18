@@ -2,7 +2,6 @@ from .deps import g_sheet
 from gspread.cell import Cell
 from app.statistics.services import StatisticModelBuilder
 from app.account import services as account_services
-from app.dictionary.utm import services as utmlabel_services
 
 
 async def statistic_upload_to_dashboard_sheet(sheet: g_sheet):
