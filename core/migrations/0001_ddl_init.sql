@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS "user" (
 	is_admin bool NOT NULL DEFAULT false,
 	email varchar(255) NULL,
 	phone_number varchar(16) NULL,
-	webinar_time timestamptz NOT NULL,
+	webinar_time timestamptz NULL,
 	test_finished bool NOT NULL DEFAULT false,
 	knowledgebase_red bool NOT NULL DEFAULT false,
 	newbie bool NOT NULL DEFAULT false,
