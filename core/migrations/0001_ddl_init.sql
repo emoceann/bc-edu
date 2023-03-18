@@ -1,58 +1,115 @@
-CREATE TABLE IF NOT EXISTS utmlabeldict (
-    id char(36) not null  primary key,
-    source varchar(256) not null,
-    medium varchar(256) not null,
-    campaign varchar(256) not null,
-    content int not null not null 
-);
+-- "user" definition
+
+-- Drop table
+
+-- DROP TABLE "user";
 
 CREATE TABLE IF NOT EXISTS "user" (
-    id bigint primary key,
-    hash VARCHAR(255) NOT NULL,
-    username VARCHAR(1024),
-    full_name VARCHAR(1024),
-    language_code VARCHAR(8),
-    created_at TIMESTAMP with time zone NOT NULL,
-    updated_at TIMESTAMP with time zone NOT NULL,
-    is_admin INT NOT NULL  DEFAULT 0,
-    email CHAR(255),
-    phone_number CHAR(16),
-    coins integer default 0,
-    rank char(10) default 'Падаван',
-    webinar_time TIMESTAMP,
-    close INT DEFAULT 0,
-    newbie int default 0,
-    experienced int default 0,
-    test_finished int default 0,
-    knowledgebase_red int default 0
+	id bigserial NOT NULL,
+	hash varchar(255) NOT NULL,
+	username varchar(1024) NULL,
+	full_name varchar(1024) NULL,
+	created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	language_code varchar(8) NULL,
+	is_admin bool NOT NULL DEFAULT false,
+	email varchar(255) NULL,
+	phone_number varchar(16) NULL,
+	webinar_time timestamptz NOT NULL,
+	test_finished bool NOT NULL DEFAULT false,
+	knowledgebase_red bool NOT NULL DEFAULT false,
+	newbie bool NOT NULL DEFAULT false,
+	experienced bool NOT NULL DEFAULT false,
+	coins int4 NOT NULL DEFAULT 0,
+	"rank" varchar(10) NOT NULL DEFAULT 'Падаван'::character varying,
+	CONSTRAINT user_pkey PRIMARY KEY (id)
 );
+
+
+-- utmlabeldict definition
+
+-- Drop table
+
+-- DROP TABLE utmlabeldict;
+
+CREATE TABLE IF NOT EXISTS utmlabeldict (
+	id uuid NOT NULL,
+	"source" varchar(256) NOT NULL,
+	medium varchar(256) NOT NULL,
+	campaign varchar(256) NOT NULL,
+	"content" int4 NOT NULL,
+	CONSTRAINT utmlabeldict_pkey PRIMARY KEY (id)
+);
+
+
+-- webinarroom definition
+
+-- Drop table
+
+-- DROP TABLE webinarroom;
 
 CREATE TABLE IF NOT EXISTS webinarroom (
-    id VARCHAR(1024) NOT NULL  PRIMARY KEY,
-    title VARCHAR(2048) NOT NULL,
-    is_autowebinar INT NOT NULL,
-    closest_date TIMESTAMP,
-    original_report JSON,
-    report_id char(2048),
-    close INT DEFAULT 0
+	id varchar(1024) NOT NULL,
+	title varchar(2048) NOT NULL,
+	is_autowebinar bool NOT NULL,
+	closest_date timestamptz NULL,
+	report_id varchar(2048) NULL,
+	original_report jsonb NULL,
+	"close" bool NOT NULL DEFAULT false,
+	CONSTRAINT webinarroom_pkey PRIMARY KEY (id)
 );
+
+
+-- nowpayment definition
+
+-- Drop table
+
+-- DROP TABLE nowpayment;
+
+CREATE TABLE IF NOT EXISTS nowpayment (
+	payment_id bigserial NOT NULL,
+	payment_status varchar(10) NOT NULL,
+	price_amount numeric(16, 2) NOT NULL,
+	price_currency varchar(3) NOT NULL,
+	pay_amount numeric(16, 10) NOT NULL,
+	pay_currency varchar(6) NOT NULL,
+	created_at timestamptz NOT NULL,
+	updated_at timestamptz NOT NULL,
+	user_id int8 NOT NULL,
+	CONSTRAINT nowpayment_pkey PRIMARY KEY (payment_id),
+	CONSTRAINT nowpayment_user_id_fkey FOREIGN KEY (user_id) REFERENCES "user"(id) ON DELETE CASCADE
+);
+
+
+-- useractions definition
+
+-- Drop table
+
+-- DROP TABLE useractions;
+
+CREATE TABLE IF NOT EXISTS useractions (
+	id serial4 NOT NULL,
+	"rank" varchar(10) NOT NULL,
+	coins int4 NOT NULL,
+	webinar_time varchar(12) NOT NULL,
+	user_id int8 NOT NULL,
+	CONSTRAINT useractions_pkey PRIMARY KEY (id),
+	CONSTRAINT useractions_user_id_fkey FOREIGN KEY (user_id) REFERENCES "user"(id) ON DELETE CASCADE
+);
+
+
+-- utmlabelm2muser definition
+
+-- Drop table
+
+-- DROP TABLE utmlabelm2muser;
 
 CREATE TABLE IF NOT EXISTS utmlabelm2muser (
-    id CHAR(36) NOT NULL  PRIMARY KEY,
-    created_at TIMESTAMP with time zone NOT NULL,
-    user_id BIGINT NOT NULL REFERENCES "user" (id) ON DELETE CASCADE,
-    utm_label_id CHAR(36) NOT NULL REFERENCES utmlabeldict (id) ON DELETE CASCADE
-);
-
-
-create table if not exists nowpayment(
-    payment_id bigint not null primary key,
-    payment_status char(10),
-    price_amount decimal(16, 2),
-    price_currency char(3),
-    pay_amount decimal(16, 10),
-    pay_currency char(6),
-    user_id bigint not null references "user" (id) on delete cascade,
-    created_at timestamp not null,
-    updated_at timestamp not null
+	id uuid NOT NULL,
+	created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	user_id int8 NOT NULL,
+	utm_label_id uuid NOT NULL,
+	CONSTRAINT utmlabelm2muser_pkey PRIMARY KEY (id),
+	CONSTRAINT utmlabelm2muser_user_id_fkey FOREIGN KEY (user_id) REFERENCES "user"(id) ON DELETE CASCADE,
+	CONSTRAINT utmlabelm2muser_utm_label_id_fkey FOREIGN KEY (utm_label_id) REFERENCES utmlabeldict(id) ON DELETE CASCADE
 );
