@@ -16,7 +16,7 @@ def anyio_backend():
 @pytest.fixture(scope="module")
 async def client():
     await Tortoise.init(
-        db_url='sqlite://:memory:',
+        db_url='sqlite://./db.sqlite',
         modules={
             "migrate": ["core.migrate"],
             "account": ["app.account.dao"],
@@ -26,7 +26,7 @@ async def client():
             "nowpayments": ["app.integration.nowpayments.dao"]
         }
     )
-    await migrate()
+    # await migrate()
     async with LifespanManager(app):
         async with AsyncClient(app=app, base_url="http://test") as c:
             yield c
