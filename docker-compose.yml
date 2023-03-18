@@ -5,14 +5,16 @@ services:
   application:
     build: .
     ports:
-      - '127.0.0.1:8000:8000'
-    volumes:
-      - ./env/prod.env:/bc-edu/env/dev.env
+      - '0.0.0.0:3030:8000'
+    depends_on:
+      - postgres
+    #volumes:
+    #  - ./env/prod.env:/bc-edu/env/dev.env
 
   postgres:
-    image: postgres:15-alpine
+    image: postgres:14-alpine
     env_file:
-      - ./env/prod.env
+      - ./env/dev.env
     volumes:
       - ./env/postgres/data:/var/lib/postgresql/data
       - ./env/postgres/logs:/logs
