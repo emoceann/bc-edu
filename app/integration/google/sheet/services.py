@@ -78,5 +78,19 @@ async def statistic_upload_to_userbase_sheet(sheet: g_sheet):
     userbase_sheet.update_cells(cells)
 
 
-
-
+async def statistic_upload_to_traffic_sheet(sheet: g_sheet):
+    cells = []
+    traffic_sheet = sheet.get_worksheet(1)
+    utm_labels = await utmlabel_services.get_utm_label_all()
+    start_row = 3
+    for count, value in enumerate(utm_labels):
+        utm_label_cells = [
+            Cell(row=start_row, col=1, value=count),
+            Cell(
+                row=start_row, col=2, value=str(f'utm_source={value.source}&=utm_medium={value.medium}&utm_campaign{value.campaign}&_utmcontent{value.content}')),
+            Cell(row=start_row, col=3, value=await utmlabel_services.get_count_users_by_utm_label(value.id)),
+            Cell(row=start_row, col=4, value=await utmlabel_services.get_count_webinar_users_by_utmlabel(value.id))
+        ]
+        start_row += 1
+        cells += utm_label_cells
+    traffic_sheet.update_cells(cells)
