@@ -12,8 +12,8 @@ CREATE TABLE IF NOT EXISTS "user" (
     username VARCHAR(1024),
     full_name VARCHAR(1024),
     language_code VARCHAR(8),
-    created_at TIMESTAMP NOT NULL  DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP with time zone NOT NULL,
+    updated_at TIMESTAMP with time zone NOT NULL,
     is_admin INT NOT NULL  DEFAULT 0,
     email CHAR(255),
     phone_number CHAR(16),
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS "user" (
     newbie int default 0,
     experienced int default 0,
     test_finished int default 0,
-    knowledgebase_red int default 0,
+    knowledgebase_red int default 0
 );
 
 CREATE TABLE IF NOT EXISTS webinarroom (
@@ -34,11 +34,12 @@ CREATE TABLE IF NOT EXISTS webinarroom (
     closest_date TIMESTAMP,
     original_report JSON,
     report_id char(2048),
+    close INT DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS utmlabelm2muser (
     id CHAR(36) NOT NULL  PRIMARY KEY,
-    created_at TIMESTAMP NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP with time zone NOT NULL,
     user_id BIGINT NOT NULL REFERENCES "user" (id) ON DELETE CASCADE,
     utm_label_id CHAR(36) NOT NULL REFERENCES utmlabeldict (id) ON DELETE CASCADE
 );

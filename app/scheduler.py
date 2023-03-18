@@ -41,7 +41,7 @@ async def notify_before_webinar():
     await tg_services.webinar_before_notify()
 
 
-@app.task(conds.daily.at('11:59') | conds.daily.at('14:59') | conds.daily.at('18:59'))
+@app.task(conds.daily.at('10:59') | conds.daily.at('13:59') | conds.daily.at('17:59'))
 async def notify_webinar():
     await tg_services.webinar_start_notify()
 

@@ -16,7 +16,8 @@ async def on_startup():
             "dictionary_utm": ["app.dictionary.utm.dao"],
             "integration_bizon365": ["app.integration.bizon365.dao"],
             "nowpayments": ["app.integration.nowpayments.dao"]
-        }
+        },
+	#use_tz=True
     )
     # await migrate()
 
