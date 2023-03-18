@@ -33,7 +33,8 @@ CREATE TABLE IF NOT EXISTS webinarroom (
     is_autowebinar INT NOT NULL,
     closest_date TIMESTAMP,
     original_report JSON,
-    report_id char(2048)
+    report_id char(2048),
+    close INT DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS utmlabelm2muser (
