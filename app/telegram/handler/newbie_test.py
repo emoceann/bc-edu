@@ -315,7 +315,7 @@ async def newbie_choose_after(msg: types.Message, state: FSMContext):
             one_time_keyboard=True).add(text['button_1'])
         await msg.answer(text['webinar_info'], reply_markup=markup)
         await NewUser.webinar_reg_start.set()
-    if msg.text == 'Изучить базу знаний':
+    if msg.text == 'Изучить базу знаний📜':
         coins = (await state.get_data()).get('coins', 0)
         text = get_template(
             'newbie_knowledge_base.html',
@@ -331,4 +331,7 @@ async def newbie_choose_after(msg: types.Message, state: FSMContext):
         await msg.answer(text['text_knowledge'], reply_markup=markup)
         await NewUser.newbie_knowledge_base.set()
     if msg.text == 'Посмотреть результаты Banana Crypto Alliance📊':
-        await msg.answer('Результаты')
+        text = get_template('questions.html', content_list=dict(stats={}, buttons5={}))
+        markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True).add(*(i for i in text['buttons5'].split('\n')))
+        await msg.answer(text['stats'], reply_markup=markup)
+        await NewUser.webinar_reg_start.set()
