@@ -90,3 +90,9 @@ async def newbie_knowledge_choose(msg: types.Message, state: FSMContext):
         ).add(text['button_1'])
         await msg.answer(text['webinar_info'], reply_markup=markup)
         await NewUser.webinar_reg_start.set()
+
+    if msg.text == 'Посмотреть результаты Banana Crypto Alliance 📝':
+        text = get_template('newbie_knowledge_base.html', content_list=dict(stats={}, buttons5={}))
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True).add(*(i for i in text['buttons5'].split('\n')))
+        await msg.reply(text['stats'], reply_markup=markup)
+        await NewUser.webinar_reg_start.set()
