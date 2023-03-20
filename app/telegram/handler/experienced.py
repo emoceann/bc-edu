@@ -39,7 +39,7 @@ async def experienced_choose(msg: types.Message, state: FSMContext):
         one_time_keyboard=True
     ).add(*(i for i in text['button3'].split('\n')))
     await NewUser.alliance_enter_or_webinar.set()
-    if msg.text == 'Посмотреть статистику':
+    if msg.text == 'Посмотреть статистику📊':
         await msg.answer(text['stats'], reply_markup=markup)
     if msg.text == 'Взглянуть на Alliance изнутри':
         await msg.answer(text['alliance_inside'], reply_markup=markup)
@@ -57,7 +57,7 @@ async def webreg_start(msg: types.Message, state: FSMContext):
             button_1={}
         )
     )
-    if msg.text == 'Хочу узнать больше':
+    if msg.text == 'Хочу узнать больше📋':
         markup = types.ReplyKeyboardMarkup(
             resize_keyboard=True,
             one_time_keyboard=True

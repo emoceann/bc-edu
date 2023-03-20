@@ -21,7 +21,7 @@ class NotionAPIConnector:
 
     API_URL = 'https://api.notion.com'
 
-    def __init__(self, auth_token: str = settings.AUTH_TOKEN):
+    def __init__(self, auth_token: str = settings.NOTION_AUTH_TOKEN):
         self.__auth_token = auth_token
         self._client = self._get_client()
 

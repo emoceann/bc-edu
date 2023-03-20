@@ -250,18 +250,25 @@ async def newbie_q10(msg: types.Message, state: FSMContext):
 
 @dp.message_handler(state=NewUser.newbie_test_result)
 async def newbie_result(msg: types.Message, state: FSMContext):
+    user = await account_services.get_user_by_fields(msg.from_user.id, 'knowledgebase_red')
+    webinar_title = await bizon_services.get_last_webinar_title()
     text = get_template(
         'questions.html',
         content_list=dict(
             answer_10={},
             wrong_answer_10={},
-            buttons={'webinar_title': await bizon_services.get_last_webinar_title()}
+            buttons={'webinar_title': webinar_title}
         )
     )
+    buttons = [i for i in text['buttons'].split('\n')]
+    if not webinar_title:
+        buttons.pop(2)
+    if user.knowledgebase_red:
+        buttons.pop(3)
     markup = types.ReplyKeyboardMarkup(
         row_width=1,
         resize_keyboard=True
-    ).add(*(i for i in text['buttons'].split('\n')))
+    ).add(*buttons)
     if msg.text == '4':
         async with state.proxy() as data:
             data['coins'] += 100
@@ -323,5 +330,5 @@ async def newbie_choose_after(msg: types.Message, state: FSMContext):
             one_time_keyboard=True).add(*(i for i in text['buttons1'].split('\n')))
         await msg.answer(text['text_knowledge'], reply_markup=markup)
         await NewUser.newbie_knowledge_base.set()
-    if msg.text == 'Посмотреть результаты Banana Crypto Alliance':
+    if msg.text == 'Посмотреть результаты Banana Crypto Alliance📊':
         await msg.answer('Результаты')

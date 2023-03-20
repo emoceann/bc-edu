@@ -18,7 +18,7 @@ async def notify(msg: types.Message, state: FSMContext):
             one_time_keyboard=True).add(text['button_1'])
         await msg.answer(text['webinar_info'], reply_markup=markup)
         await NewUser.webinar_reg_start.set()
-    if msg.text == 'Посмотреть результаты Banana Crypto Alliance':
+    if msg.text == 'Посмотреть результаты Banana Crypto Alliance📊':
         await msg.answer('Результаты')
     if msg.text == 'Пройти испытание и заработать Banana-coins':
         await NewUser.newbie_q1.set()

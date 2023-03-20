@@ -79,10 +79,10 @@ async def count_webinar_users_ban(source: ReportInside) -> int:
     return len([user for user in source.usersMeta.values() if user.get('ban', False)])
 
 
-async def get_last_webinar_title() -> str:
+async def get_last_webinar_title() -> str | None:
     if webinar := await WebinarRoom.filter(close=False).order_by('closest_date').first().only('title'):
         return webinar.title
-    return "В данный момент предстоящих вебинаров нет"
+    return
 
 
 async def get_first_un_closed_webinar_report() -> str | None:

@@ -15,17 +15,21 @@ async def newbie_infobase(msg: types.Message, state: FSMContext):
         'newbie_knowledge_base.html',
         content_list=dict(
             alliance_link={},
+            stats={},
+            buttons5={},
             text_knowledge2={
                 'sum': (await state.get_data()).get('banana_coins', 0)},
             buttons2={}
         )
     )
 
-    if msg.text == ' Потратить 100 Banana-coins':
+    if msg.text == ' Потратить 100 Banana-coins🟡':
         await msg.reply(text['alliance_link'])
-    if msg.text == 'Посмотреть результаты Banana Crypto Alliance':
-        await msg.reply('Результаты')
-    if msg.text == 'Найти свой путь к Силе':
+    if msg.text == 'Посмотреть результаты Banana Crypto Alliance📊':
+        markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True).add(*(i for i in text['buttons5'].split('\n')))
+        await msg.reply(text['stats'], reply_markup=markup)
+        await NewUser.webinar_reg_start.set()
+    if msg.text == 'Найти свой путь к Силе💪':
         buttons = text['buttons2'].split('\n')[1:9]
         markup = types.InlineKeyboardMarkup(
             row_width=1
@@ -45,13 +49,17 @@ async def newbie_articles(callback: types.CallbackQuery, state: FSMContext):
             buttons4={'webinar_title': webinar_title}
         )
     )
-    markup = types.ReplyKeyboardMarkup(
-        resize_keyboard=True,
-        row_width=1).add(*(i for i in text['buttons4'].split('\n')))
+    markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True, row_width=1)
+
     await bot.send_message(callback.from_user.id, text['buttons3'])
     await account_services.update_user_fields(callback.from_user.id, {'knowledgebase_red': True})
-    await asyncio.sleep(10)
-    await bot.send_message(callback.from_user.id, text['notify'], reply_markup=markup)
+    await asyncio.sleep(1)
+    if not webinar_title:
+        buttons = [i for i in text['buttons4'].split('\n')]
+        buttons.pop(2)
+        await bot.send_message(callback.from_user.id, 'Продолжаем изучать базу знаний📜', reply_markup=markup.add(*buttons))
+    else:
+        await bot.send_message(callback.from_user.id, text['notify'], reply_markup=markup.add(*(i for i in text['buttons4'].split('\n'))))
     await NewUser.newbie_knowledge_choose.set()
 
 

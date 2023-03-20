@@ -62,15 +62,18 @@ async def notify_24_hours():
     if not not_active:
         log.info('Не было неактивных юзеров за вчера')
         return
-
+    webinar_title = await bizon_services.get_last_webinar_title()
     text = get_template(
         'notify.html',
         content_list=dict(
             text={},
-            buttons={'webinar_title': await bizon_services.get_last_webinar_title()}
+            buttons={'webinar_title': webinar_title}
         )
     )
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1).add(*(i for i in text['buttons'].split('\n')))
+    buttons = [i for i in text['buttons'].split('\n')]
+    if not webinar_title:
+        buttons.pop(2)
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1).add(*buttons)
     for i in not_active:
         if not i.test_finished:
             markup.add('Пройти испытание и заработать Banana-coins')
