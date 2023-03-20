@@ -53,7 +53,7 @@ async def newbie_articles(callback: types.CallbackQuery, state: FSMContext):
 
     await bot.send_message(callback.from_user.id, text['buttons3'])
     await account_services.update_user_fields(callback.from_user.id, {'knowledgebase_red': True})
-    await asyncio.sleep(1)
+    await asyncio.sleep(5)
     if not webinar_title:
         buttons = [i for i in text['buttons4'].split('\n')]
         buttons.pop(2)
@@ -69,10 +69,10 @@ async def newbie_knowledge_choose(msg: types.Message, state: FSMContext):
         'newbie_knowledge_base.html',
         content_list=dict(buttons2={})
     )
-    if msg.text == 'Продолжить изучение базы знаний':
+    if msg.text == 'Продолжить изучение базы знаний📜':
         buttons = text['buttons2'].split('\n')[1:9]
         markup = types.InlineKeyboardMarkup(
-            row_width=1
+            row_width=3
         ).add(*(types.InlineKeyboardButton(i[1:], callback_data=i[:1]) for i in buttons))
         await msg.reply('База знаний', reply_markup=markup)
         await NewUser.newbie_articles_info.set()
