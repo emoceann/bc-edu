@@ -4,7 +4,6 @@ from app.integration.bizon365 import services
 from app.telegram import services as tg_services
 from app.integration.google.sheet import services as google_services
 from app.integration.google.sheet.deps import g_sheet
-from core.contrib.notion.main import main as notion_main
 
 
 app = Rocketry(execution="async")
@@ -51,8 +50,3 @@ async def upload_stats_to_google():
     await google_services.statistic_upload_to_userbase_sheet(g_sheet)
     await google_services.statistic_upload_to_traffic_sheet(g_sheet)
     await google_services.statistic_upload_to_dashboard_sheet(g_sheet)
-
-
-@app.task('every 2 hours')
-async def user_knowledge_base_coins_check():
-    await notion_main()

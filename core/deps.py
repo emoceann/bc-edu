@@ -12,7 +12,6 @@ async def on_startup():
         modules={
             "migrate": ["core.migrate"],
             "account": ["app.account.dao"],
-            "telegram": ["app.telegram.dao"],
             "dictionary_utm": ["app.dictionary.utm.dao"],
             "integration_bizon365": ["app.integration.bizon365.dao"],
             "nowpayments": ["app.integration.nowpayments.dao"]
