@@ -57,7 +57,7 @@ async def newbie_articles(callback: types.CallbackQuery, state: FSMContext):
     if not webinar_title:
         buttons = [i for i in text['buttons4'].split('\n')]
         buttons.pop(2)
-        await bot.send_message(callback.from_user.id, 'Продолжаем изучать базу знаний📜', reply_markup=markup.add(*buttons))
+        await bot.send_message(callback.from_user.id, 'Продолжай изучать базу знаний📜 либо присоединяйся к нашей крипто-братве 👊!', reply_markup=markup.add(*buttons))
     else:
         await bot.send_message(callback.from_user.id, text['notify'], reply_markup=markup.add(*(i for i in text['buttons4'].split('\n'))))
     await NewUser.newbie_knowledge_choose.set()
@@ -72,7 +72,7 @@ async def newbie_knowledge_choose(msg: types.Message, state: FSMContext):
     if msg.text == 'Продолжить изучение базы знаний📜':
         buttons = text['buttons2'].split('\n')[1:9]
         markup = types.InlineKeyboardMarkup(
-            row_width=3
+            row_width=1
         ).add(*(types.InlineKeyboardButton(i[1:], callback_data=i[:1]) for i in buttons))
         await msg.reply('База знаний', reply_markup=markup)
         await NewUser.newbie_articles_info.set()
