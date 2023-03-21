@@ -10,6 +10,7 @@ from app.account import services as account_service
 from app.integration.bizon365 import services as bizon_services
 from app.dictionary.utm import services as utm_service
 from core.logger import logger as log
+from app.telegram.dao import RedArticleUser
 
 
 async def register_user(utm_id: str | None, msg: types.Message, usr: types.User):
@@ -108,3 +109,9 @@ async def webinar_before_notify():
             await bot.send_message(i.id, text['before_1'])
     log.debug(f'Зарегистрировавшиеся  пользователи были успешно уведомлены до начала вебинара')
 
+
+async def get_red_articles_user(user_id: int):
+    return await RedArticleUser.filter(user=user_id)
+
+async def red_article_user_write(user_id: int, article_id: int):
+    await RedArticleUser.create(user_id=user_id, article_id=article_id)

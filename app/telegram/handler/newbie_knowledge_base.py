@@ -6,6 +6,7 @@ from aiogram import types
 from aiogram.dispatcher import FSMContext
 from app.account import services as account_services
 from app.integration.bizon365 import services as bizon_services
+from app.telegram.services import get_red_articles_user, red_article_user_write
 
 
 @dp.message_handler(state=NewUser.newbie_knowledge_base)  # хендлер для новичка который не выбрал тесты
@@ -31,6 +32,12 @@ async def newbie_infobase(msg: types.Message, state: FSMContext):
         await NewUser.webinar_reg_start.set()
     if msg.text == 'Найти свой путь к Силе💪':
         buttons = text['buttons2'].split('\n')[1:9]
+        user_red = await get_red_articles_user(user_id=msg.from_user.id)
+        if user_red:
+            for i in user_red:
+                for y in buttons:
+                    if y.startswith(str(i.article_id)):
+                        buttons.remove(y)
         markup = types.InlineKeyboardMarkup(
             row_width=1
         ).add(*(types.InlineKeyboardButton(i[1:], callback_data=i[:1]) for i in buttons))
@@ -40,19 +47,20 @@ async def newbie_infobase(msg: types.Message, state: FSMContext):
 
 @dp.callback_query_handler(state=NewUser.newbie_articles_info)
 async def newbie_articles(callback: types.CallbackQuery, state: FSMContext):
+    await red_article_user_write(user_id=callback.from_user.id, article_id=callback.data)
     webinar_title = await bizon_services.get_last_webinar_title()
     text = get_template(
         'newbie_knowledge_base.html',
         content_list=dict(
             buttons3={'choice': callback.data},
             notify={'webinar_title': webinar_title},
-            buttons4={'webinar_title': webinar_title}
+            buttons4={'webinar_title': webinar_title},
+            continue_read={},
+            all_read={}
         )
     )
     markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True, row_width=1)
-
     await bot.send_message(callback.from_user.id, text['buttons3'])
-    await account_services.update_user_fields(callback.from_user.id, {'knowledgebase_red': True})
     await asyncio.sleep(5)
     if not webinar_title:
         buttons = [i for i in text['buttons4'].split('\n')]
@@ -65,10 +73,8 @@ async def newbie_articles(callback: types.CallbackQuery, state: FSMContext):
 
 @dp.message_handler(state=NewUser.newbie_knowledge_choose)
 async def newbie_knowledge_choose(msg: types.Message, state: FSMContext):
-    text = get_template(
-        'newbie_knowledge_base.html',
-        content_list=dict(buttons2={})
-    )
+    article_count = len((await get_red_articles_user(msg.from_user.id)))
+    webinar_title = await bizon_services.get_last_webinar_title()
     if msg.text == 'Продолжить изучение базы знаний📜':
         buttons = text['buttons2'].split('\n')[1:9]
         markup = types.InlineKeyboardMarkup(
