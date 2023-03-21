@@ -30,3 +30,4 @@ class NewUser(StatesGroup):
     webinar_user_time = State()
     webinar_start = State()
     notfiy_not_active = State()
+    all_read_choose = State()

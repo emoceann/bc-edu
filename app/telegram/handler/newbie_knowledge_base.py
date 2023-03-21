@@ -20,7 +20,9 @@ async def newbie_infobase(msg: types.Message, state: FSMContext):
             buttons5={},
             text_knowledge2={
                 'sum': (await state.get_data()).get('banana_coins', 0)},
-            buttons2={}
+            buttons2={},
+            all_read={},
+            button_all={}
         )
     )
 
@@ -31,6 +33,16 @@ async def newbie_infobase(msg: types.Message, state: FSMContext):
         await msg.reply(text['stats'], reply_markup=markup)
         await NewUser.webinar_reg_start.set()
     if msg.text == 'Найти свой путь к Силе💪':
+        article_count = len((await get_red_articles_user(msg.from_user.id)))
+        webinar_title = await bizon_services.get_last_webinar_title()
+        if article_count >= 8:
+            await account_services.update_user_fields(msg.from_user.id, {'knowledgebase_red': True})
+            message = text['all_read']
+            markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True, row_width=1)
+            buttons = [i for i in text['button_all'].split('\n')]
+            if not webinar_title:
+                buttons.pop(2)
+            await bot.send_message(msg.from_user.id, message, reply_markup=markup.add(*buttons))
         buttons = text['buttons2'].split('\n')[1:9]
         user_red = await get_red_articles_user(user_id=msg.from_user.id)
         if user_red:
