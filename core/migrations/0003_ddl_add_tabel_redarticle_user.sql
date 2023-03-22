@@ -1,5 +1,5 @@
-create table if not exists "redarticleuser"(
-    user int8 NOT NULL,
-    article_title varchar(64),
-    constraint redarticleuser_user_fkey foreign key (user) references "user"(id) on delete cascade
-);
+CREATE TABLE IF NOT EXISTS "redarticleuser" (
+    "id" SERIAL NOT NULL PRIMARY KEY,
+    "article_id" INT NOT NULL,
+    "user_id" BIGINT NOT NULL REFERENCES "user" ("id") ON DELETE CASCADE
+ );
