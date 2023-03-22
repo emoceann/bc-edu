@@ -67,8 +67,7 @@ async def newbie_articles(callback: types.CallbackQuery, state: FSMContext):
             buttons3={'choice': callback.data},
             notify={'webinar_title': webinar_title},
             buttons4={'webinar_title': webinar_title},
-            continue_read={},
-            all_read={}
+            continue_read={}
         )
     )
     markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True, row_width=1)
@@ -80,7 +79,7 @@ async def newbie_articles(callback: types.CallbackQuery, state: FSMContext):
         await bot.send_message(callback.from_user.id, 'Продолжай изучать базу знаний📜 либо присоединяйся к нашей крипто-братве 👊!', reply_markup=markup.add(*buttons))
     else:
         await bot.send_message(callback.from_user.id, text['notify'], reply_markup=markup.add(*(i for i in text['buttons4'].split('\n'))))
-    await NewUser.newbie_knowledge_choose.set()
+        await NewUser.newbie_knowledge_choose.set()
 
 
 @dp.message_handler(state=NewUser.newbie_knowledge_choose)
@@ -88,12 +87,30 @@ async def newbie_knowledge_choose(msg: types.Message, state: FSMContext):
     article_count = len((await get_red_articles_user(msg.from_user.id)))
     webinar_title = await bizon_services.get_last_webinar_title()
     if msg.text == 'Продолжить изучение базы знаний📜':
-        buttons = text['buttons2'].split('\n')[1:9]
-        markup = types.InlineKeyboardMarkup(
-            row_width=1
-        ).add(*(types.InlineKeyboardButton(i[1:], callback_data=i[:1]) for i in buttons))
-        await msg.reply('База знаний', reply_markup=markup)
-        await NewUser.newbie_articles_info.set()
+        text = get_template('newbie_knowledge_base.html', content_list=dict(buttons2={}, all_read={}, button_all={}))
+        if article_count >= 8:
+            await account_services.update_user_fields(msg.from_user.id, {'knowledgebase_red': True})
+            message = text['all_read']
+            markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True, row_width=1)
+            buttons = [i for i in text['button_all'].split('\n')]
+            if not webinar_title:
+                buttons.pop(2)
+            await bot.send_message(msg.from_user.id, message, reply_markup=markup.add(*buttons))
+            await NewUser.all_read_choose.set()
+        else:
+            buttons = text['buttons2'].split('\n')[1:9]
+            user_red = await get_red_articles_user(user_id=msg.from_user.id)
+            if user_red:
+                for i in user_red:
+                    for y in buttons:
+                        if y.startswith(str(i.article_id)):
+                            buttons.remove(y)
+            markup = types.InlineKeyboardMarkup(
+                row_width=1
+            ).add(*(types.InlineKeyboardButton(i[1:], callback_data=i[:1]) for i in buttons))
+            await msg.reply('База знаний', reply_markup=markup)
+            await NewUser.newbie_articles_info.set()
+
     if msg.text.startswith('Зарегистрироваться на вебинар'):
         text = get_template(
             'webinar_reg.html',
@@ -113,4 +130,32 @@ async def newbie_knowledge_choose(msg: types.Message, state: FSMContext):
         text = get_template('newbie_knowledge_base.html', content_list=dict(stats={}, buttons5={}))
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True).add(*(i for i in text['buttons5'].split('\n')))
         await msg.reply(text['stats'], reply_markup=markup)
+        await NewUser.webinar_reg_start.set()
+
+
+@dp.message_handler(state=NewUser.all_read_choose)
+async def all_read(msg: types.Message):
+    if msg.text == 'Посмотреть результаты Banana Crypto Alliance 📝':
+        text = get_template('newbie_knowledge_base.html', content_list=dict(stats={}, buttons5={}))
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True).add(*(i for i in text['buttons5'].split('\n')))
+        await msg.reply(text['stats'], reply_markup=markup)
+        await NewUser.webinar_reg_start.set()
+
+    if msg.text == 'Присоединиться к Banana Crypto Alliance':
+        text = get_template('newbie_knowledge_base.html', content_list=dict(alliance_link={}))
+        await msg.reply(text['alliance_link'])
+
+    if msg.text.startswith('Зарегистрироваться на вебинар'):
+        text = get_template(
+            'webinar_reg.html',
+            content_list=dict(
+                webinar_info={},
+                button_1={}
+            )
+        )
+        markup = types.ReplyKeyboardMarkup(
+            resize_keyboard=True,
+            one_time_keyboard=True
+        ).add(text['button_1'])
+        await msg.answer(text['webinar_info'], reply_markup=markup)
         await NewUser.webinar_reg_start.set()
