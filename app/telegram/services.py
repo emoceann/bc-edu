@@ -80,12 +80,15 @@ async def notify_24_hours():
             markup.add('Пройти испытание и заработать Banana-coins')
         await bot.send_message(i.id, f"{text['text'] + i.rank}!", reply_markup=markup)
         await storage.set_state(chat=i.id, user=i.id, state=NewUser.notfiy_not_active)
-    log.debug(f'{len(not_active)} - не активных пользователей были успешно уведомлены')
+    log.debug(f'{len(not_active)} - неактивных пользователей были успешно уведомлены')
 
 
 async def webinar_start_notify():
     today = datetime.now().replace(minute=0, second=0, microsecond=0) + timedelta(hours=1)
     webinar_users = await account_service.get_users_by_webinar_date(today)
+    if not webinar_users:
+        log.debug('Не было зарегестрированных пользователей на вебинар')
+        return
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True).add('Подключится')
     text = get_template('notify.html', content_list=dict(webinar_start={}))
 
@@ -97,8 +100,12 @@ async def webinar_start_notify():
 
 
 async def webinar_before_notify():
-    today = datetime.now()
+    today = datetime.now().replace(minute=0, second=0, microsecond=0) + timedelta(hours=3)
     webinar_users = await account_service.get_users_by_webinar_date_gt(today)
+    if not webinar_users:
+        log.debug('Не было зарегестрированных пользователей на вебинар')
+        return
+    count = 0
     text = get_template('notify.html', content_list=dict(before_12={}, before_3={}, before_1={}))
     for i in webinar_users:
         if (i.webinar_time.replace(tzinfo=None) - today) == timedelta(hours=12):
@@ -107,7 +114,8 @@ async def webinar_before_notify():
             await bot.send_message(i.id, text['before_3'])
         elif (i.webinar_time.replace(tzinfo=None) - today) == timedelta(hours=1):
             await bot.send_message(i.id, text['before_1'])
-    log.debug(f'Зарегистрировавшиеся  пользователи были успешно уведомлены до начала вебинара')
+        count += 1
+    log.debug(f'{count} - зарегистрировавшиеся  пользователи были успешно уведомлены до начала вебинара')
 
 
 async def get_red_articles_user(user_id: int):
