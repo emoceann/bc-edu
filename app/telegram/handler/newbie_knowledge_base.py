@@ -77,6 +77,7 @@ async def newbie_articles(callback: types.CallbackQuery, state: FSMContext):
         buttons = [i for i in text['buttons4'].split('\n')]
         buttons.pop(2)
         await bot.send_message(callback.from_user.id, 'Продолжай изучать базу знаний📜 либо присоединяйся к нашей крипто-братве 👊!', reply_markup=markup.add(*buttons))
+        await NewUser.newbie_knowledge_choose.set()
     else:
         await bot.send_message(callback.from_user.id, text['notify'], reply_markup=markup.add(*(i for i in text['buttons4'].split('\n'))))
         await NewUser.newbie_knowledge_choose.set()
