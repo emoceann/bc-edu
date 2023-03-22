@@ -23,5 +23,5 @@ logger_uvicorn.addHandler(sh)
 
 # Tortoise
 logger_tortoise = logging.getLogger("tortoise")
-logger_tortoise.setLevel(logging.DEBUG)
+logger_tortoise.setLevel(logging.INFO)
 logger_tortoise.addHandler(sh)

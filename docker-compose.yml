@@ -16,5 +16,5 @@ services:
     env_file:
       - ./env/dev.env
     volumes:
-      - ./env/postgres/data:/var/lib/postgresql/data
-      - ./env/postgres/logs:/logs
+      - /mnt/bc-edu/postgres/data:/var/lib/postgresql/data
+      - /mnt/bc-edu/postgres/logs:/logs
