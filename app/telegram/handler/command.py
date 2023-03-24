@@ -51,7 +51,6 @@ async def check_exp(msg: types.Message, state: FSMContext):
 @dp.message_handler(state=NewUser.newbie)
 async def newbie_state(msg: types.Message, state: FSMContext):
     if msg.text == 'Изучить базу знаний📜':
-        await account_services.update_user_fields(msg.from_user.id, {'coins': 100})
         text = get_template(
             'newbie_knowledge_base.html',
             content_list=dict(

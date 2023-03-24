@@ -4,6 +4,7 @@ from app.integration.bizon365 import services
 from app.telegram import services as tg_services
 from app.integration.google.sheet import services as google_services
 from app.integration.google.sheet.deps import g_sheet
+from core.contrib.notion.services.utils import get_user_comments
 
 
 app = Rocketry(execution="async")
@@ -50,3 +51,8 @@ async def upload_stats_to_google():
     await google_services.statistic_upload_to_userbase_sheet(g_sheet)
     await google_services.statistic_upload_to_traffic_sheet(g_sheet)
     await google_services.statistic_upload_to_dashboard_sheet(g_sheet)
+
+
+@app.task('every 1 hour')
+async def comments_parse_reward():
+    await get_user_comments()

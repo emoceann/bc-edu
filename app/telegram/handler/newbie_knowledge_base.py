@@ -1,7 +1,7 @@
 import asyncio
 from app.telegram.deps import dp, bot
 from app.telegram.handler.states import NewUser
-from app.telegram.services import get_template
+from app.telegram.services import get_template, email_validator
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from app.account import services as account_services
@@ -11,7 +11,8 @@ from app.telegram.services import get_red_articles_user, red_article_user_write
 
 @dp.message_handler(state=NewUser.newbie_knowledge_base)  # хендлер для новичка который не выбрал тесты
 async def newbie_infobase(msg: types.Message, state: FSMContext):
-    await account_services.update_user_fields(msg.from_user.id, {'coins': 100})
+    if not (await account_services.get_user_by_fields(msg.from_user.id, 'reward')).reward:
+        await account_services.update_user_fields(msg.from_user.id, {'coins': 100, 'reward': True})
     text = get_template(
         'newbie_knowledge_base.html',
         content_list=dict(
@@ -22,7 +23,8 @@ async def newbie_infobase(msg: types.Message, state: FSMContext):
                 'sum': (await state.get_data()).get('banana_coins', 0)},
             buttons2={},
             all_read={},
-            button_all={}
+            button_all={},
+            email_message={}
         )
     )
 
@@ -33,28 +35,32 @@ async def newbie_infobase(msg: types.Message, state: FSMContext):
         await msg.reply(text['stats'], reply_markup=markup)
         await NewUser.webinar_reg_start.set()
     if msg.text == 'Найти свой путь к Силе💪':
-        article_count = len((await get_red_articles_user(msg.from_user.id)))
-        webinar_title = await bizon_services.get_last_webinar_title()
-        if article_count >= 8:
-            await account_services.update_user_fields(msg.from_user.id, {'knowledgebase_red': True})
-            message = text['all_read']
-            markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True, row_width=1)
-            buttons = [i for i in text['button_all'].split('\n')]
-            if not webinar_title:
-                buttons.pop(2)
-            await bot.send_message(msg.from_user.id, message, reply_markup=markup.add(*buttons))
-        buttons = text['buttons2'].split('\n')[1:9]
-        user_red = await get_red_articles_user(user_id=msg.from_user.id)
-        if user_red:
-            for i in user_red:
-                for y in buttons:
-                    if y.startswith(str(i.article_id)):
-                        buttons.remove(y)
-        markup = types.InlineKeyboardMarkup(
-            row_width=1
-        ).add(*(types.InlineKeyboardButton(i[1:], callback_data=i[:1]) for i in buttons))
-        await msg.reply(text['text_knowledge2'], reply_markup=markup)
-        await NewUser.newbie_articles_info.set()
+        if not (await account_services.get_user_by_fields(msg.from_user.id, 'email')).email:
+            await msg.reply(text['email_message'])
+            await NewUser.get_user_email.set()
+        else:
+            article_count = len((await get_red_articles_user(msg.from_user.id)))
+            webinar_title = await bizon_services.get_last_webinar_title()
+            if article_count >= 8:
+                await account_services.update_user_fields(msg.from_user.id, {'knowledgebase_red': True})
+                message = text['all_read']
+                markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True, row_width=1)
+                buttons = [i for i in text['button_all'].split('\n')]
+                if not webinar_title:
+                    buttons.pop(2)
+                await bot.send_message(msg.from_user.id, message, reply_markup=markup.add(*buttons))
+            buttons = text['buttons2'].split('\n')[1:9]
+            user_red = await get_red_articles_user(user_id=msg.from_user.id)
+            if user_red:
+                for i in user_red:
+                    for y in buttons:
+                        if y.startswith(str(i.article_id)):
+                            buttons.remove(y)
+            markup = types.InlineKeyboardMarkup(
+                row_width=1
+            ).add(*(types.InlineKeyboardButton(i[1:], callback_data=i[:1]) for i in buttons))
+            await msg.reply(text['text_knowledge2'], reply_markup=markup)
+            await NewUser.newbie_articles_info.set()
 
 
 @dp.callback_query_handler(state=NewUser.newbie_articles_info)
@@ -160,3 +166,45 @@ async def all_read(msg: types.Message):
         ).add(text['button_1'])
         await msg.answer(text['webinar_info'], reply_markup=markup)
         await NewUser.webinar_reg_start.set()
+
+
+@dp.message_handler(state=NewUser.get_user_email)
+async def webinar_user_email(msg: types.Message, state: FSMContext):
+    if not await email_validator(msg.text):
+        await msg.reply('Неправильный формат!')
+    if await account_services.get_or_none_user_by_email(msg.text):
+        await msg.reply('Пожалуйста выберите другой email!')
+    else:
+        await account_services.update_user_fields(msg.from_user.id, {'email': msg.text})
+        text = get_template(
+            'newbie_knowledge_base.html',
+            content_list=dict(
+                text_knowledge2={
+                    'sum': (await state.get_data()).get('banana_coins', 0)},
+                buttons2={},
+                all_read={},
+                button_all={}
+            )
+        )
+        article_count = len((await get_red_articles_user(msg.from_user.id)))
+        webinar_title = await bizon_services.get_last_webinar_title()
+        if article_count >= 8:
+            await account_services.update_user_fields(msg.from_user.id, {'knowledgebase_red': True})
+            message = text['all_read']
+            markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True, row_width=1)
+            buttons = [i for i in text['button_all'].split('\n')]
+            if not webinar_title:
+                buttons.pop(2)
+            await bot.send_message(msg.from_user.id, message, reply_markup=markup.add(*buttons))
+        buttons = text['buttons2'].split('\n')[1:9]
+        user_red = await get_red_articles_user(user_id=msg.from_user.id)
+        if user_red:
+            for i in user_red:
+                for y in buttons:
+                    if y.startswith(str(i.article_id)):
+                        buttons.remove(y)
+        markup = types.InlineKeyboardMarkup(
+            row_width=1
+        ).add(*(types.InlineKeyboardButton(i[1:], callback_data=i[:1]) for i in buttons))
+        await msg.reply(text['text_knowledge2'], reply_markup=markup)
+        await NewUser.newbie_articles_info.set()

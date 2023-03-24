@@ -1,6 +1,6 @@
 import datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from core.contrib.notion.services.connection.managers.types import DefaultResponseData, DataObjectType
 
@@ -10,8 +10,11 @@ class User(BaseModel):
 
 
 class Parent(BaseModel):
-    block_id: str
+    block_id: str = Field(alias='page_id')
     type: str
+
+    class Config:
+        allow_population_by_field_name = True
 
 
 class Annotations(BaseModel):

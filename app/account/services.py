@@ -60,5 +60,8 @@ async def get_user_by_fields(user_id, *args):
     return await User.get(id=user_id).only(*args)
 
 
+async def get_or_none_user_by_email(email: str) -> User | None:
+    return await User.get_or_none(email=email)
+
 async def get_all_users():
     return await User.all()
