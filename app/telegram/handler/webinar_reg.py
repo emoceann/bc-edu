@@ -35,6 +35,8 @@ async def webinar_user_name(msg: types.Message, state: FSMContext):
 async def webinar_user_email(msg: types.Message, state: FSMContext):
     if not await email_validator(msg.text):
         await msg.reply('Неправильный формат!')
+    if await account_services.get_or_none_user_by_email(msg.text):
+        await msg.reply('Пожалуйста выберите другой email!')
     else:
         text = get_template(
             'webinar_reg.html',

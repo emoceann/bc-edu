@@ -4,6 +4,7 @@ import logging
 from pydantic import BaseModel
 
 from core.contrib.notion.services.connection.base import NotionAPIConnector
+from core.contrib.notion.services.connection.managers.page import PageManager
 from core.contrib.notion.services.connection.managers.block import BlockManager
 from core.contrib.notion.services.connection.managers.block.types import ResponseDataBlock
 from core.contrib.notion.services.connection.managers.comment.manager import CommentManager
@@ -24,6 +25,7 @@ class Notion:
         connector = NotionAPIConnector()
 
         self.block_manager = connector.init_manager(BlockManager)
+        self.page_manager = connector.init_manager(PageManager)
         self.comment_manager = connector.init_manager(CommentManager)
         self.user_manager = connector.init_manager(UserManager)
 
@@ -96,4 +98,18 @@ class Notion:
         self.__comments_data = []
 
         logger.info(f'Сформирован список из {len(comments)} комментариев')
+        return comments
+
+    async def get_comments_from_page(self, page_ids: list[str]):
+        pages_result = []
+        for i in page_ids:
+            pages_result.append(await self.page_manager.get(i))
+
+        tasks = []
+        for i in pages_result:
+            tasks.append(self._get_block_comments(i))
+
+        await asyncio.gather(*tasks)
+        comments = self.__comments_data.copy()
+        self.__comments_data = []
         return comments

@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS "user" (
 	updated_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	language_code varchar(8) NULL,
 	is_admin bool NOT NULL DEFAULT false,
-	email varchar(255) NULL,
+	email varchar(255) NULL UNIQUE,
 	phone_number varchar(16) NULL,
 	webinar_time timestamptz NULL,
 	test_finished bool NOT NULL DEFAULT false,
