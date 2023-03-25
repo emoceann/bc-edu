@@ -8,11 +8,13 @@ services:
       - '0.0.0.0:3030:8000'
     depends_on:
       - postgres
-    #volumes:
-    #  - ./env/prod.env:/bc-edu/env/dev.env
+    volumes:
+      - /mnt/bc-edu/logs:/logs
 
   postgres:
     image: postgres:14-alpine
+    ports:
+      - '5432:5432'
     env_file:
       - ./env/dev.env
     volumes:
