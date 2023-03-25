@@ -1,4 +1,7 @@
 from rocketry import Rocketry, conds
+from rocketry.log import MinimalRecord
+from redbird.repos import CSVFileRepo
+from pathlib import Path
 from core.logger import logger as log
 from app.integration.bizon365 import services
 from app.telegram import services as tg_services
@@ -7,7 +10,10 @@ from app.integration.google.sheet.deps import g_sheet
 from core.contrib.notion.services.utils import get_user_comments
 
 
-app = Rocketry(execution="async")
+app = Rocketry(
+    execution="async",
+    logger_repo=CSVFileRepo(filename=Path('logs/rocketry_logs.csv'), model=MinimalRecord)
+)
 
 
 @app.task('every 2 hours')
