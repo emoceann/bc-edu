@@ -12,7 +12,7 @@ from core.contrib.notion.services.utils import get_user_comments
 
 app = Rocketry(
     execution="async",
-    logger_repo=CSVFileRepo(filename=Path('logs/rocketry_logs.csv'), model=MinimalRecord)
+    logger_repo=CSVFileRepo(filename=Path('/logs/rocketry_logs.csv'), model=MinimalRecord)
 )
 
 
