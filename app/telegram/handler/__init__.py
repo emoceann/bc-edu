@@ -5,3 +5,4 @@ from .experienced import *
 from .webinar_reg import *
 from .webinar import *
 from .notify import *
+from .payments import *

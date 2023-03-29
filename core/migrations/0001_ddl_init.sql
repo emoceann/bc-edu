@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS nowpayment (
 	price_amount numeric(16, 2) NOT NULL,
 	price_currency varchar(3) NOT NULL,
 	pay_amount numeric(16, 10) NOT NULL,
-	pay_currency varchar(6) NOT NULL,
+	pay_currency varchar(10) NOT NULL,
 	created_at timestamptz NOT NULL,
 	updated_at timestamptz NOT NULL,
 	user_id int8 NOT NULL,

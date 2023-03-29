@@ -32,3 +32,6 @@ class NewUser(StatesGroup):
     notfiy_not_active = State()
     all_read_choose = State()
     get_user_email = State()
+    order_subscription = State()
+    order_wait = State()
+    order_wait_coin = State()

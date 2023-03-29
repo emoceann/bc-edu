@@ -7,7 +7,7 @@ class NowPayment(Model):
     price_amount = fields.DecimalField(max_digits=16, decimal_places=2)
     price_currency = fields.CharField(max_length=3)
     pay_amount = fields.DecimalField(max_digits=16, decimal_places=10)
-    pay_currency = fields.CharField(max_length=6)
+    pay_currency = fields.CharField(max_length=10)
     user = fields.ForeignKeyField('account.User', on_delete=fields.CASCADE)
     created_at = fields.DatetimeField()
     updated_at = fields.DatetimeField()
