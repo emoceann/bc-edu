@@ -18,6 +18,7 @@ class Settings(BaseSettings):
 
     NOWPAYMENT_TOKEN: str
     NOWPAYMENT_CALLBACK_AUTH_TOKEN: str
+    NOWPAYMENT_CALLBACK_URL: str
     NOWPAYMENT_URL: str
 
     GOOGLE_SHEET_URL_TOKEN: str

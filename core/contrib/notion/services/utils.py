@@ -4,6 +4,7 @@ from core.contrib.notion.services.settings import settings
 from .notion import NotionComment, Notion, logger
 from core.contrib.notion.dao import CommentsNotion
 from app.account import services as account_services
+from app.telegram import deps as tg_deps
 
 
 TitleList = TypeVar('TitleList', bound=list[str])
@@ -43,6 +44,7 @@ async def get_user_comments():
                 page_id=i.comment.parent.block_id, comment_id=i.comment.id, email=i.user.person.email, message=i.comment.rich_text
             )
             user = await notion_comment.user_email.get()
+            await tg_deps.bot.send_message(user.id, 'Криптан💪! На твой счет начислено 100 Banana-Coins🟡 за коммент под статьей!')
             await account_services.update_user_fields(user.id, {'coins': 100})
 
 

@@ -59,6 +59,6 @@ async def upload_stats_to_google():
     await google_services.statistic_upload_to_dashboard_sheet(g_sheet)
 
 
-@app.task('every 1 hour')
+@app.task('every 5 minutes')
 async def comments_parse_reward():
     await get_user_comments()

@@ -94,7 +94,7 @@ async def newbie_knowledge_choose(msg: types.Message, state: FSMContext):
     article_count = len((await get_red_articles_user(msg.from_user.id)))
     webinar_title = await bizon_services.get_last_webinar_title()
     if msg.text == 'Продолжить изучение базы знаний📜':
-        text = get_template('newbie_knowledge_base.html', content_list=dict(buttons2={}, all_read={}, button_all={}))
+        text = get_template('newbie_knowledge_base.html', content_list=dict(buttons2={}, all_read={}, button_all={}, alliance_link={}))
         if article_count >= 8:
             await account_services.update_user_fields(msg.from_user.id, {'knowledgebase_red': True})
             message = text['all_read']
@@ -138,6 +138,10 @@ async def newbie_knowledge_choose(msg: types.Message, state: FSMContext):
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True).add(*(i for i in text['buttons5'].split('\n')))
         await msg.reply(text['stats'], reply_markup=markup)
         await NewUser.webinar_reg_start.set()
+
+    if msg.text == 'Присоединиться к Banana Crypto Alliance':
+        text = get_template('newbie_knowledge_base.html', content_list=dict(alliance_link={}))
+        await msg.reply(text['alliance_link'])
 
 
 @dp.message_handler(state=NewUser.all_read_choose)
