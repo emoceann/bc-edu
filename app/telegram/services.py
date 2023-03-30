@@ -71,13 +71,14 @@ async def notify_24_hours():
             buttons={'webinar_title': webinar_title}
         )
     )
-    buttons = [i for i in text['buttons'].split('\n')]
+    buttons1 = [i for i in text['buttons'].split('\n')]
     if not webinar_title:
-        buttons.pop(2)
+        buttons1.pop(2)
 
     for i in not_active:
+        buttons = buttons1[:]
         if i.test_finished:
-            buttons.pop(3)
+            buttons = [i for i in buttons if i != buttons[3]]
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1).add(*buttons)
         await bot.send_message(i.id, f"{text['text'] + i.rank}!", reply_markup=markup)
         await storage.set_state(chat=i.id, user=i.id, state=NewUser.notfiy_not_active)
